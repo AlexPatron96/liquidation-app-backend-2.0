@@ -9,7 +9,7 @@ const authMiddleware = (req, res, next) => {
     console.log(req.headers);
     console.log("token sin descortar : ");
 
-    token = token?.replace("Bearer ", "");
+    token = token.replace("Bearer ", "");
     console.log( "nuevo token: ");
 
     jwt.verify(

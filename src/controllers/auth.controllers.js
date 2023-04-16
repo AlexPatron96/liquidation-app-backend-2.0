@@ -5,11 +5,7 @@ const register = async (req, res) => {
     try {
         const user = req.body;
         const result = await AuthServices.register(user);
-        //reglas de negocio todas las validaciones que se realizen aqui en el controlador.
-        // if (result.isValidPassword) {
-        //     res.status(201).json({ message: 'mensajeInfo' });
-        // }
-        console.log(result);
+        
         if (result) {
             res.status(201).json({ message: "user Created", result });
             await transporter.sendMail({
