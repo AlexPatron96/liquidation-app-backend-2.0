@@ -52,5 +52,5 @@ jobs:
         with:
           app-name: 'liquidation-app-back'
           slot-name: 'Production'
-          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_39011B958E5E4265B936C12DE69DFD58 }}
+          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_EF97408675F24558BBAC60E382385F20 }}
           package: .
