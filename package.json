@@ -6,7 +6,6 @@
   "scripts": {
     "start": "node ./src/server.js",
     "dev": "nodemon ./src/server.js",
-    "test": "jest",
     "seed": "node ./src/seeders/seed.js"
   },
   "keywords": [],
