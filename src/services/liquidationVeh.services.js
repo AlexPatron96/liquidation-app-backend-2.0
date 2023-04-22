@@ -28,13 +28,45 @@ class liquidationVeh {
                                 as: "route"
                             }
                         ]
-
                     }, {
                         model: models.discounts_veh,
                         as: "discounts_veh",
                     }, {
                         model: models.expense_veh,
                         as: "expense_veh"
+                    }, {
+                        model: models.cash_veh,
+                        as: "cash_veh",
+                        include: [
+                            {
+                                model: models.check_cash_veh,
+                                as: "check_cash_veh",
+                                include: [
+                                    {
+                                        model: models.check_money,
+                                        as: "check_veh",
+                                    }
+                                ]
+                            },
+                        ]
+                    }, {
+                        model: models.products_returned,
+                        as: "products_returned",
+                        include: [
+                            {
+                                model: models.bill_product_return,
+                                as: "bill_product_return",
+                                include: [
+                                    {
+                                        model: models.bills,
+                                        as: "id_bills_bill",
+                                    }
+                                ]
+                            }
+                        ]
+                    }, {
+                        model: models.bills_liquidation_veh,
+                        as: "bills_liquidation_vehs",
                     }, {
                         model: models.delivered_credits,
                         as: "delivered_credits",
@@ -45,13 +77,15 @@ class liquidationVeh {
                             model: models.sellers,
                             as: "seller",
                         }
-                    }, {
-                        model: models.products_returned,
-                        as: "products_returned",
-                    }, {
-                        model: models.cash_veh,
-                        as: "cash_veh",
                     }
+                    // , {
+                    //     model: models.products_returned,
+                    //     as: "products_returned",
+                    // }
+                    // , {
+                    //     model: models.cash_veh,
+                    //     as: "cash_veh",
+                    // }
                 ],
             });
             return result;

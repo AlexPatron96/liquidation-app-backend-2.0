@@ -6,11 +6,11 @@ require("dotenv").config();
 const authMiddleware = (req, res, next) => {
     let { authorization: token } = req.headers;
     
-    console.log(req.headers);
-    console.log("token sin descortar : ");
+    // console.log(req.headers);
+    // console.log("token sin descortar : ");
 
     token = token.replace("Bearer ", "");
-    console.log( "nuevo token: ");
+    // console.log( "nuevo token: ");
 
     jwt.verify(
         token, 
@@ -18,10 +18,10 @@ const authMiddleware = (req, res, next) => {
         {algorithm: "HS512" },
         (err , decoded) => {
             if (err) {
-                console.log("invalid token");
+                // console.log("invalid token");
                 res.status(400).json({error: "Invalid Token"});
             } else {
-                console.log("decodificado con exito");
+                // console.log("decodificado con exito");
                 next();
             }
         });

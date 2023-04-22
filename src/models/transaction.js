@@ -22,7 +22,7 @@ class transaction extends Sequelize.Model {
         }
       },
       num_bill: {
-        type: DataTypes.STRING(17),
+        type: DataTypes.STRING(25),
         allowNull: false,
         
       },

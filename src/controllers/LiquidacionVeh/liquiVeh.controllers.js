@@ -1,9 +1,15 @@
 const genCod = require("..");
 const billService = require("../../services/bill.services");
 const cashSell = require("../../services/cashSell.services");
+const cashVeh = require("../../services/cashVeh.services");
+const checkMoney = require("../../services/checkMoney.services");
+const deliveredCred = require("../../services/deliveredCred.services");
 const discountSell = require("../../services/discountSell.services");
+const discountVeh = require("../../services/discountVeh.services");
 const expenseSell = require("../../services/expenseSell.services");
+const expenseVeh = require("../../services/expenseVeh.services");
 const liquidationVeh = require("../../services/liquidationVeh.services");
+const productRet = require("../../services/productRet.services");
 const transactionService = require("../../services/transaction.services");
 
 const getAllItem = async (req, res) => {
@@ -31,25 +37,27 @@ const createItem = async (req, res) => {
         const productReturnInvoice = data[5];
         const transaction = data[6];
         const invoiceLiquidation = data[7];
-        const checkMoneyView = data[8];
+        // const checkMoneyView = data[8];
         const sellerDeliverCred = data[9];
         const principal = data[14];
+        const checkMoneyview = data[15];
 
         const { settlement_code: codLiquidation } = principal
         const { id_user: userID } = principal
 
-        console.log(principal);
+        //console.log(principal);
         const result = await liquidationVeh.create(principal);
+
         if (result) {
             const { settlement_code } = result;
-            console.log("id de resul: " + settlement_code);
             const invoiceLiquidated = invoiceLiquidation.map((invoiceId) => {
                 const { id: id_bills } = invoiceId;
-                return { id_bills, id_liquidation: settlement_code }
+                return { id_bills, id_liquidation: settlement_code, pass: invoiceId.pago }
             });
 
             const processInvoice = await liquidationVeh.invoiceLiquidated(invoiceLiquidated);
             if (processInvoice) {
+
                 const transactionProces = transaction.forEach(async (trans, index) => {
                     const { id_bill, pay } = trans;
                     const findBill = await billService.findId(id_bill);
@@ -73,7 +81,7 @@ const createItem = async (req, res) => {
                                     trans.detail = detail;
                                     const transactionCorrect = await transactionService.create(trans);
                                     if (transactionCorrect) {
-                                        console.log("transacion se a generado de manera correcta : " + index);
+                                        //console.log("transacion se a generado de manera correcta : " + index);
                                     } else {
                                         res.status(400).json({ message: 'Not process transaccition correct', transactionCorrect });
                                     }
@@ -81,24 +89,66 @@ const createItem = async (req, res) => {
                             }
                         }
                     }
+                    else {
+                        res.status(400).json({ message: 'Not process Liquidation Error! - Find inovice ' });
+                    }
                 });
 
-                const cashProcess = await cashSell.create(cash);
+                const cashProcess = await cashVeh.create(cash);
+                const checkLiquidation = check.forEach(async (chekIt, index) => {
+                    let data = chekIt;
+                    const settlement_code = codLiquidation;
+                    data.settlement_code = codLiquidation;
+                    const checkProcess = await checkMoney.create(data);
+                    const { id: id_check } = checkProcess;
+                    const dataCheck = { id_check, settlement_code }
+                    if (cashProcess) {
+                        const checkCashVehProcess = await checkMoney.createCheckCashVeh(dataCheck);
+                        if (checkCashVehProcess) {
+                            //console.log("checkCashVehProcess" + index);
+                        } else {
+                            return res.status(400).json({ message: 'Error! Not process checkCashVehProcess ' });
+                        }
+                    } else {
+                        return res.status(400).json({ message: 'Error! Not process checkProcessProcess ' });
+                    }
+                });
 
-                const expensesProcess = await expenseSell.create(expenses);
+                const expensesProcess = await expenseVeh.create(expenses);
                 if (expensesProcess) {
 
-                    const discountProcess = await discountSell.create(discount);
+                    const discountProcess = await discountVeh.create(discount);
                     if (discountProcess) {
 
-                        console.log({ message: "correcto discountProcess" });
-                        if (cashProcess) {
+                        const productReturnPorcess = await productRet.create(productReturn);
+                        if (productReturnPorcess) {
 
-                            const checkLiquidation = check.forEach(async (chekIt, index) => {
-                                console.log(chekIt);
-                                const checkProcess = await checkMoney.create(chekIt);
+                            const producRetInv = productReturnInvoice.forEach(async (invoProRet, index) => {
+                                let data = invoProRet;
+                                delete data.id;
+                                const productReturnInvoiceProcess = await billService.create(data);
+                                if (productReturnInvoiceProcess) {
+                                    const { id: id_bills } = productReturnInvoiceProcess;
+                                    const settlement_code = codLiquidation
+                                    const dataBillProdctRet = { id_bills, settlement_code };
+                                    const billProductReturnProcess = await productRet.createBillProducRt(dataBillProdctRet);
+                                } else {
+                                    return res.status(400).json({ message: 'Error! Not process productReturnInvoiceProcess ' });
+                                }
                             });
-                            
+
+                            const sellDelCred = sellerDeliverCred.forEach(async (deliCred, index) => {
+                                let data = deliCred;
+                                data.settlement_code = codLiquidation;
+                                const sellerDeliverCredProcess = await deliveredCred.create(data);
+                                if (sellerDeliverCredProcess) {
+                                    //console.log("sellDelCred" + index);
+                                } else {
+                                    return res.status(400).json({ message: 'Error! Not process sellerDeliverCredProcess ' });
+                                }
+                            });
+
+
                             res.status(200).json({ message: "Liquidation resolve with success", result });
 
                         } else {

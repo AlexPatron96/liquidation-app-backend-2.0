@@ -31,7 +31,7 @@ const getIdItem = async (req, res) => {
 const createItem = async (req, res) => {
     try {
         const data = req.body;
-        console.log(data);
+        // console.log(data);
         const result = await bankService.create(data);
         if (result) {
             res.status(201).json({ message: 'Bank created', result });
@@ -48,8 +48,8 @@ const updateItem = async (req, res) => {
     try {
         const { id } = req.params;
         const data = req.body;
-        console.log(id);
-        console.log(data);
+        // console.log(id);
+        // console.log(data);
         const result = await bankService.update(id, data);
         if (result.ok) {
             res.status(200).json({ message: 'Bank successfully updated', result });

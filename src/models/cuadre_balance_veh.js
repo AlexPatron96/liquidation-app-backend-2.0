@@ -33,7 +33,7 @@ class cuadre_balance_veh extends Sequelize.Model {
     sequelize,
     tableName: 'cuadre_balance_veh',
     schema: 'public',
-    timestamps: false,
+    timestamps: true,
     indexes: [
       {
         name: "cuadre_balance_veh_pkey",

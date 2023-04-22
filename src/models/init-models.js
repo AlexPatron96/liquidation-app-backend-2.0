@@ -14,6 +14,8 @@ const _cuadre_balance_seller = require("./cuadre_balance_seller");
 const _cuadre_balance_veh = require("./cuadre_balance_veh");
 const _day = require("./day");
 const _delivered_credits = require("./delivered_credits");
+const _check_cash_veh = require("./check_cash_veh");
+const _check_cash_sell = require("./check_cash_sell");
 // const _deposits_money = require("./deposits_money");
 const _discounts_sell = require("./discounts_sell");
 const _discounts_veh = require("./discounts_veh");
@@ -23,6 +25,7 @@ const _liquidation_sellers = require("./liquidation_sellers");
 const _liquidation_veh = require("./liquidation_veh");
 const _pre_liquidations = require("./pre_liquidations");
 const _products_returned = require("./products_returned");
+const _bill_product_return = require("./bill_product_return");
 const _route = require("./route");
 const _route_day = require("./route_day");
 const _sellers = require("./sellers");
@@ -61,8 +64,11 @@ function initModels(sequelize) {
   const cuadre_balance_veh = _cuadre_balance_veh(sequelize, DataTypes);
   const cuadre_balance_seller = _cuadre_balance_seller(sequelize, DataTypes);
   const check_money = _check_money(sequelize, DataTypes);
+  const check_cash_veh = _check_cash_veh(sequelize, DataTypes);
+  const check_cash_sell = _check_cash_sell(sequelize, DataTypes);
   const bills_pre = _bills_pre(sequelize, DataTypes);
   const bills_liquidation_sellers = _bills_liquidation_sellers(sequelize, DataTypes);
+  const bill_product_return = _bill_product_return(sequelize, DataTypes);
 
 
   cuadre_balance_seller.belongsTo(balance_sell, { as: "id_balance_balance_sell", foreignKey: "id_balance" });
@@ -86,23 +92,19 @@ function initModels(sequelize) {
   transaction.belongsTo(bills, { as: "num_bill_bill", foreignKey: "id_bill" });
   bills.hasMany(transaction, { as: "transactions", foreignKey: "id_bill" });
 
-  check_money.belongsTo(cash_sell, { as: "cash_sell", foreignKey: "settlement_code" });
-  cash_sell.hasMany(check_money, { as: "check_moneys", foreignKey: "settlement_code" });
+  check_cash_sell.belongsTo(check_money, { as: "check_sell", foreignKey: "id_check" });
+  check_money.hasMany(check_cash_sell, { as: "check_cash_sell", foreignKey: "id_check" });
 
-  check_money.belongsTo(cash_veh, { as: "cash_veh", foreignKey: "settlement_code" });
-  cash_veh.hasMany(check_money, { as: "check_moneys", foreignKey: "settlement_code" });
+  check_cash_veh.belongsTo(check_money, { as: "check_veh", foreignKey: "id_check" })
+  check_money.hasMany(check_cash_veh, { as: "check_cash_veh", foreignKey: "id_check" })
 
-  // cash_sell.belongsTo(check_money, { as: "id_check_moneys", foreignKey: "settlement_code" });
-  // check_money.hasMany(cash_sell, { as: "cash_sell", foreignKey: "settlement_code" });
-  
-  // cash_veh.belongsTo(check_money, { as: "id_check_moneys", foreignKey: "settlement_code" });
-  // check_money.hasMany(cash_veh, { as: "cash_veh", foreignKey: "settlement_code" })
 
-  // cash_sell.belongsTo(deposits_money, { as: "id_deposits_money", foreignKey: "settlement_table" });
-  // deposits_money.hasMany(cash_sell, { as: "cash_sell", foreignKey: "settlement_table" })
+  check_cash_veh.belongsTo(cash_veh, { as: "cash_veh", foreignKey: "settlement_code" });
+  cash_veh.hasMany(check_cash_veh, { as: "check_cash_veh", foreignKey: "settlement_code" });
 
-  // deposits_money.belongsTo(cash_sell, { as: "settlement_table_cash_sell", foreignKey: "settlement_table" });
-  // cash_sell.hasOne(deposits_money, { as: "deposits_moneys", foreignKey: "settlement_table" });
+  check_cash_sell.belongsTo(cash_sell, { as: "cash_sell", foreignKey: "settlement_code" });
+  cash_sell.hasMany(check_cash_sell, { as: "check_cash_sell", foreignKey: "settlement_code" });
+
 
   check_money.belongsTo(clients, { as: "id_client_client", foreignKey: "id_client" });
   clients.hasMany(check_money, { as: "check_moneys", foreignKey: "id_client" });
@@ -113,7 +115,7 @@ function initModels(sequelize) {
   route_day.belongsTo(day, { as: "day", foreignKey: "day_id" });
   day.hasMany(route_day, { as: "route_days", foreignKey: "day_id" });
 
- //Verificar---------------
+  //Verificar---------------
   bills_liquidation_sellers.belongsTo(liquidation_sellers, { as: "id_liquidation_liquidation_seller", foreignKey: "id_liquidation" });
   liquidation_sellers.hasMany(bills_liquidation_sellers, { as: "bills_liquidation_sellers", foreignKey: "id_liquidation" });
 
@@ -127,10 +129,10 @@ function initModels(sequelize) {
   liquidation_sellers.hasMany(expense_sell, { as: "expense_sell", foreignKey: "settlement_code" });
   //-------------------------
 
-//Verificar---------------
+  //Verificar---------------
   bills_liquidation_veh.belongsTo(liquidation_veh, { as: "id_liquidation_liquidation_veh", foreignKey: "id_liquidation" });
   liquidation_veh.hasMany(bills_liquidation_veh, { as: "bills_liquidation_vehs", foreignKey: "id_liquidation" });
-  
+
   cash_veh.belongsTo(liquidation_veh, { as: "liquidation_veh", foreignKey: "settlement_code" });
   liquidation_veh.hasOne(cash_veh, { as: "cash_veh", foreignKey: "settlement_code" });
 
@@ -145,6 +147,13 @@ function initModels(sequelize) {
 
   products_returned.belongsTo(liquidation_veh, { as: "liquidation_veh", foreignKey: "settlement_code" });
   liquidation_veh.hasOne(products_returned, { as: "products_returned", foreignKey: "settlement_code" });
+
+  bill_product_return.belongsTo(bills, { as: "id_bills_bill", foreignKey: "id_bills" });
+  bills.hasMany(bill_product_return, { as: "bill_product_return", foreignKey: "id_bills" });
+
+  bill_product_return.belongsTo(products_returned, { as: "id_products_returned", foreignKey: "settlement_code" })
+  products_returned.hasMany(bill_product_return, { as: "bill_product_return", foreignKey: "settlement_code" })
+
   //************************************ */
 
   bills_pre.belongsTo(pre_liquidations, { as: "id_pre_liquidation_pre_liquidation", foreignKey: "id_pre_liquidation" });
@@ -214,6 +223,8 @@ function initModels(sequelize) {
     cuadre_balance_veh,
     day,
     delivered_credits,
+    check_cash_veh,
+    check_cash_sell,
     // deposits_money,
     discounts_sell,
     discounts_veh,
@@ -223,6 +234,7 @@ function initModels(sequelize) {
     liquidation_veh,
     pre_liquidations,
     products_returned,
+    bill_product_return,
     route,
     route_day,
     sellers,

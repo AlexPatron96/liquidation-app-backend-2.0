@@ -42,15 +42,15 @@ const createItem = async (req, res) => {
         const principal = data[10];
         const { settlement_code: codLiquidation } = principal
         const { id_user: userID } = principal
-        console.log(principal);
+        //console.log(principal);
 
         const result = await liquiSeller.create(principal);
         if (result) {
             const { settlement_code } = result;
-            console.log("id de resul: " + settlement_code);
+            //console.log("id de resul: " + settlement_code);
             const invoiceLiquidated = invoice.map((invoiceId) => {
-                const { id: id_bills } = invoiceId;
-                return { id_bills, id_liquidation: settlement_code }
+                const { id: id_bills, pago: pass } = invoiceId;
+                return { id_bills, id_liquidation: settlement_code, pass }
             });
 
             const processInvoice = await liquiSeller.invoiceLiquidated(invoiceLiquidated);
@@ -79,9 +79,9 @@ const createItem = async (req, res) => {
                                     trans.detail = detail;
                                     const transactionCorrect = await transactionService.create(trans);
                                     if (transactionCorrect) {
-                                        console.log("transacion se a generado de manera correcta : " + index);
+                                        //console.log("transacion se a generado de manera correcta : " + index);
                                     } else {
-                                        res.status(400).json({ message: 'Not process transaccition correct', transactionCorrect });
+                                        res.status(400).json({ message: 'Not process transacction correct', transactionCorrect });
                                     }
                                 }
                             }
@@ -89,7 +89,6 @@ const createItem = async (req, res) => {
                     }
                 });
 
-                const cashProcess = await cashSell.create(cash);
 
                 const expensesProcess = await expenseSell.create(expenses);
                 if (expensesProcess) {
@@ -97,12 +96,27 @@ const createItem = async (req, res) => {
                     const discountProcess = await discountSell.create(discount);
                     if (discountProcess) {
 
-                        console.log({ message: "correcto discountProcess" });
-                        if (cashProcess) {
+                        //console.log({ message: "correcto discountProcess" });
 
+                        const cashProcess = await cashSell.create(cash);
+                        if (cashProcess) {
                             const checkLiquidation = check.forEach(async (chekIt, index) => {
-                                console.log(chekIt);
-                                const checkProcess = await checkMoney.create(chekIt);
+                                let data = chekIt;
+                                const settlement_code = codLiquidation;
+                                data.settlement_code = codLiquidation;
+                                const checkProcess = await checkMoney.create(data);
+                                const { id: id_check } = checkProcess;
+                                const dataCheck = { id_check, settlement_code };
+                                if (cashProcess) {
+                                    const checkCashVehProcess = await checkMoney.createCheckCashSell(dataCheck);
+                                    if (checkCashVehProcess) {
+                                        console.log("checkCashSellProcess: " + index);
+                                    } else {
+                                        return res.status(400).json({ message: 'Error! Not process checkCashVehProcess ' });
+                                    }
+                                } else {
+                                    return res.status(400).json({ message: 'Error! Not process checkProcessProcess ' });
+                                }
                             });
 
                             res.status(200).json({ message: "Liquidation resolve with success", result });

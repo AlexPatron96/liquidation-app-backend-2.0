@@ -24,7 +24,7 @@ class products_returned extends Sequelize.Model {
       allowNull: true
     },
     total: {
-      type: DataTypes.INTEGER,
+      type: DataTypes.DOUBLE,
       allowNull: true
     },
     detail: {

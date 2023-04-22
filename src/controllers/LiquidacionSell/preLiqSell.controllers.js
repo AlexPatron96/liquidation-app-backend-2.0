@@ -31,7 +31,7 @@ const getIdItem = async (req, res) => {
 const createItem = async (req, res) => {
     try {
         const recepter = req.body;
-        console.log(recepter);
+        // console.log(recepter);
         const principal = recepter[0];
         const data = recepter[1];
 
@@ -41,7 +41,7 @@ const createItem = async (req, res) => {
         processData.pre_Date = principal.dateBack;
         processData.total = parseFloat(principal.total);
         // processData.total = 55;
-        console.log(processData);
+        // console.log(processData);
         const result = await preLiqSell.create(processData);
         if (result) {
             const { id } = result;

@@ -27,7 +27,7 @@ const login = async (req, res) => {
     try {
         const credentials = req.body;
         const { mail, password } = req.body;
-        console.log(credentials);
+        // console.log(credentials);
         if (!mail) {
             return res.status(400).json({
                 error: "Missing data",
@@ -41,14 +41,14 @@ const login = async (req, res) => {
             })
         }
         const result = await AuthServices.login({ mail, password });
-        console.log(result.isValid);
+        // console.log(result.isValid);
         if (result.isValid) {
             const { username, id, mail , password } = result.user;
             const userData = { username, id, mail , password};
             const token = await AuthServices.genToken(userData);
             userData.password = "unknown";
             userData.token = token;
-            console.log(userData);
+            // console.log(userData);
             res.status(201).json({ message: "Permission enabled to logged in user", data: userData });
         } else {
             res.status(400).json(result.message);
@@ -61,7 +61,7 @@ const login = async (req, res) => {
 const deleteUser = async (req, res) => {
     try {
         const { id } = req.params;
-        console.log(id);
+        // console.log(id);
         const result = await AuthServices.delete(id);
         if (result) {
             res.status(201).json({ message: 'Delete correct' });

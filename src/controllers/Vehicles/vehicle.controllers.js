@@ -32,7 +32,7 @@ const getIdItem = async (req, res) => {
 const createItem = async (req, res) => {
     try {
         const vehicle = req.body;
-        console.log(vehicle);
+        //console.log(vehicle);
         const result = await vehService.create(vehicle);
         if (result) {
             const { id: id_veh } = result;
@@ -48,10 +48,27 @@ const createItem = async (req, res) => {
     }
 };
 
+const balance = async (req, res) => {
+    try {
+        const vehicle = req.body;
+        const { id: id_veh } = vehicle;
+        const total = 0;
+        const dataBalance = { id_veh, total }
+        const result = await balanceVehService.create(dataBalance);
+        if (result) {
+            res.status(201).json({ message: 'Created Balance Vehicle', result });
+        } else {
+            res.status(400).json({ message: "Something wrong" });
+        }
+    } catch (error) {
+        res.status(400).json({ error: error.message });
+    }
+};
+
 const createClouster = async (req, res) => {
     try {
         const dataClouster = req.body;
-        // console.log(dataClouster);
+        // //console.log(dataClouster);
         const result = await vehService.createByClouster(dataClouster);
         if (result) {
             res.status(201).json({ message: 'Vehicle by clouster created', result });
@@ -82,7 +99,7 @@ const updateItem = async (req, res) => {
     try {
         const { id } = req.params;
         const data = req.body;
-        console.log(data);
+        //console.log(data);
         const result = await vehService.update(id, data);
         if (result.ok) {
             res.status(200).json({ message: "Item modified successfully", result });
@@ -95,4 +112,4 @@ const updateItem = async (req, res) => {
 };
 
 
-module.exports = { getAllItem, getIdItem, createItem, deleteItem, updateItem, createClouster };
+module.exports = { getAllItem, getIdItem, createItem, deleteItem, updateItem, createClouster, balance };

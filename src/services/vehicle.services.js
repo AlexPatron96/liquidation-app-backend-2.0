@@ -19,9 +19,14 @@ class vehService {
                         include: [
                             {
                                 model: models.cuadre_balance_veh,
-                                as:"cuadre_balance_vehs"
+                                as: "cuadre_balance_vehs",
+                                order: [
+                                    ["createdAt", "DESC"] // ordenar por fecha de forma descendente
+                                ],
+                                limit: 45,
                             }
-                        ]
+                        ],
+                        
                     },
                     {
                         model: models.route,
@@ -60,7 +65,7 @@ class vehService {
 
     static async createByClouster(data) {
         try {
-            const result = await models.vehicles.bulkCreate(data, {ignoreDuplicates: true});
+            const result = await models.vehicles.bulkCreate(data, { ignoreDuplicates: true });
             return result;
         } catch (error) {
             throw error;
@@ -117,9 +122,9 @@ class vehService {
     static async update(id, data) {
         try {
             const result = await models.vehicles.update(data, { where: { id } });
-            console.log(result);
+            // console.log(result);
             if (result[0] !== 0) {
-                console.log("es cero");
+                // console.log("es cero");
                 return { ok: true, result };
             } else {
                 return { ok: false, message: "No se pudo actualizar el item" }

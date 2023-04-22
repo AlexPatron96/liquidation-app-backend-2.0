@@ -43,9 +43,9 @@ class cashVeh {
     static async update(id, data) {
         try {
             const result = await models.cash_veh.update(data, { where: { id } });
-            console.log(result);
+            // console.log(result);
             if (result[0] !== 0) {
-                console.log("es cero");
+                // console.log("es cero");
                 return { ok: true, result };
             } else {
                 return { ok: false, message: "No se pudo actualizar el item" }

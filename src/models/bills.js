@@ -14,7 +14,7 @@ class bills extends Sequelize.Model {
       primaryKey: true
     },
     num_bill: {
-      type: DataTypes.STRING(17),
+      type: DataTypes.STRING(25),
       allowNull: false,
       unique: "bills_num_bill_key"
     },

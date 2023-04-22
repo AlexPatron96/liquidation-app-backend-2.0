@@ -19,7 +19,8 @@ db.authenticate()
     .catch((error) => console.log(error));
 //db.sync({ alter: this.trace })
 
-db.sync({ force: false })
+// db.sync({ force: true })
+db.sync({ alter: false })
     .then(() => console.log("Base de datos Sincronizada"))
     .catch((error) => console.log(error));
     

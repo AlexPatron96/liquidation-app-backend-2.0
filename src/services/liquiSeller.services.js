@@ -9,6 +9,7 @@ class liquiSeller {
                 attributes: {
                     exclude: ["id_user", "id_seller"]
                 },
+                limit: 500,
                 include: [
                     {
                         model: models.users,
@@ -62,16 +63,22 @@ class liquiSeller {
                         as: "cash_sell",
                         include: [
                             {
-                                model: models.check_money,
-                                as: "check_moneys",
+                                model: models.check_cash_sell,
+                                as: "check_cash_sell",
                                 include: [
                                     {
-                                        model: models.clients,
-                                        as: "id_client_client",
-                                    },
-                                    {
-                                        model: models.bank,
-                                        as: "id_bank_bank",
+                                        model: models.check_money,
+                                        as: "check_sell",
+                                        include: [
+                                            {
+                                                model: models.clients,
+                                                as: "id_client_client",
+                                            },
+                                            {
+                                                model: models.bank,
+                                                as: "id_bank_bank",
+                                            }
+                                        ]
                                     }
                                 ]
                             }

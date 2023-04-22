@@ -10,6 +10,7 @@ class liquiSeller {
                     ['id', 'DESC'],
                     ['pre_Date', 'DESC']
                 ],
+                limit: 500,
                 include: [
                     {
                         model: models.sellers,

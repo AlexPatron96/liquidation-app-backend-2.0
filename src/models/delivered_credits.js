@@ -6,10 +6,16 @@ module.exports = (sequelize, DataTypes) => {
 class delivered_credits extends Sequelize.Model {
   static init(sequelize, DataTypes) {
   return super.init({
+    id: {
+      autoIncrement: true,
+      autoIncrementIdentity: true,
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      primaryKey: true
+    },
     settlement_code: {
       type: DataTypes.STRING(50),
       allowNull: false,
-      primaryKey: true,
       references: {
         model: 'liquidation_veh',
         key: 'settlement_code'

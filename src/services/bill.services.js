@@ -10,6 +10,7 @@ class billService {
                 order: [
                     ['id', 'DESC'],
                 ],
+                limit: 1500,
                 attributes: {
                     exclude: ["id_client", "id_seller"]
                 },
@@ -24,10 +25,17 @@ class billService {
                             {
                                 model: models.route_day,
                                 as: "route_day",
+                                attributes: {
+                                    exclude: ["id_route","day_id","id"]
+                                },
                                 include: [
                                     {
                                         model: models.day,
                                         as: "day",
+                                    },
+                                    {
+                                        model: models.route,
+                                        as: "id_route_route",
                                     }
                                 ]
                             },
@@ -35,10 +43,16 @@ class billService {
                     },
                     {
                         order: [
-                            ['id', 'DESC'],['balance_date' , 'DESC']
+                            ['id', 'DESC'], ['balance_date', 'DESC']
                         ],
                         model: models.transaction,
                         as: "transactions",
+                        include: [
+                            {
+                                model: models.users,
+                                as: "id_user_user",
+                            }
+                        ]
                     },
                     {
                         model: models.sellers,
@@ -54,7 +68,7 @@ class billService {
 
     static async create(bill) {
         try {
-            console.log(bill);
+            // console.log(bill);
             const result = await models.bills.create(bill);
             return result;
 
@@ -63,15 +77,6 @@ class billService {
         }
     };
 
-    // static async createByCluster(bill) {
-    //     try {
-    //         console.log(bill);
-    //         const result = await models.bills.create(bill);
-    //         return result;
-    //     } catch (error) {
-    //         throw error;
-    //     }
-    // };
 
     static async findId(id) {
         try {

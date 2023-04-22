@@ -20,6 +20,14 @@ class productRet {
             throw error;
         }
     };
+    static async createBillProducRt(data) {
+        try {
+            const result = await models.bill_product_return.create(data);
+            return result;
+        } catch (error) {
+            throw error;
+        }
+    };
 
     static async findId(id) {
         try {
@@ -43,9 +51,9 @@ class productRet {
     static async update(id, data) {
         try {
             const result = await models.products_returned.update(data, { where: { id } });
-            console.log(result);
+            // console.log(result);
             if (result[0] !== 0) {
-                console.log("es cero");
+                // console.log("es cero");
                 return { ok: true, result };
             } else {
                 return { ok: false, message: "No se pudo actualizar el item" }

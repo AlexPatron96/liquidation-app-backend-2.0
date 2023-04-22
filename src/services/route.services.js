@@ -33,7 +33,7 @@ class RouteService {
 
     static async findId(id) {
         try {
-            console.log(id);
+            // console.log(id);
             const result = await models.route.findByPk(id);
             return result;
         } catch (error) {

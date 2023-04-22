@@ -31,7 +31,7 @@ const getIdItem = async (req, res) => {
 const createItem = async (req, res) => {
     try {
         const route = req.body;
-        console.log(route);
+        // console.log(route);
         const result = await deliveredCred.create(route);
         if (result) {
             res.status(201).json({ message: 'DeliveredCred Create' });

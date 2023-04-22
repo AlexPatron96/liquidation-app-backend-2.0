@@ -19,7 +19,7 @@ const getAllItem = async (req, res) => {
 const getRouteBill = async (req, res) => {
     try {
         const { id } = req.params;
-        console.log(id);
+        // console.log(id);
         const findRoute = await billService.searchRoute(id);
         res.status(200).json({ message: `Invoices available por la ruta del   `, findRoute });
     } catch (error) {
@@ -30,27 +30,26 @@ const getRouteBill = async (req, res) => {
 const createItem = async (req, res) => {
     try {
         let data = req.body;
-        console.log(data);
+        // console.log(data);
         let { num_bill } = data;
         const factWhite = data.isWhite === "true" ? true : false;
         // console.log(data.isWhite === "true" ? true : false);
 
         let isValid = false;
         if (factWhite) {
-
-            console.log(factWhite);
+            // console.log(factWhite);
             num = genCod("FA-BL-");
             data.num_bill = num;
             isValid = true;
-            console.log("es verdadedo es white : " + factWhite);
+            // console.log("es verdadedo es white : " + factWhite);
 
         } else {
-            console.log("es falso no  es white : " + factWhite);
+            // console.log("es falso no  es white : " + factWhite);
             // console.log();
             const validator = /\d{3}\-\d{9}/;
-            console.log(validator.test(num_bill))
+            // console.log(validator.test(num_bill))
             if (validator.test(num_bill)) {
-                console.log("SI CUMPLE LA VALIDACION");
+                // console.log("SI CUMPLE LA VALIDACION");
                 isValid = true;
             } else {
                 res.status(400).json({ message: "El numero de factura no cumple con la validacion" });
@@ -60,7 +59,7 @@ const createItem = async (req, res) => {
         // console.log(isValid);
         if (isValid) {
             const result = await billService.create(data);
-            console.log(isValid);
+            // console.log(isValid);
             if (result) {
                 res.status(201).json({ message: 'Invoice created', result });
                 // const { num_bill, deliver_date : balance_date } = result;

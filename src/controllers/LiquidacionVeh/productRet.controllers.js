@@ -31,7 +31,7 @@ const getIdItem = async (req, res) => {
 const createItem = async (req, res) => {
     try {
         const newBalance = req.body;
-        console.log(newBalance);
+        //console.log(newBalance);
         const result = await productRet.create(newBalance);
         if (result) {
             res.status(201).json({ message: 'Product Return created', result });
@@ -48,8 +48,8 @@ const updateItem = async (req, res) => {
     try {
         const { id } = req.params;
         const data = req.body;
-        console.log(id);
-        console.log(data);
+        //console.log(id);
+        //console.log(data);
         const result = await productRet.update(id, data);
         if (result.ok) {
             res.status(200).json({ message: 'Product Return successfully updated', result });

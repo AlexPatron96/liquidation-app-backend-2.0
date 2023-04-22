@@ -14,7 +14,19 @@ class sellerService {
                 include: [
                     {
                         model: models.balance_sell,
-                        as: "balance_sell"
+                        as: "balance_sell",
+                        include: [
+                            {
+                                model: models.cuadre_balance_seller,
+                                as: "cuadre_balance_sellers",
+                                order: [
+                                    ["createdAt", "DESC"] // ordenar por fecha de forma descendente
+                                ],
+                                limit: 45,
+                            },
+                            
+                        ],
+                        
                     },
                     {
                         model: models.route,

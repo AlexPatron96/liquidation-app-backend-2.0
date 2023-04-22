@@ -17,12 +17,15 @@ class customerService {
                         model: models.route_day,
                         as: "route_day",
                         attributes: {
-                            exclude: ["day_id"]
+                            exclude: ["day_id","id"]
                         },
                         include: [
                             {
                                 model: models.day,
-                                as: "day"
+                                as: "day",
+                                attributes: {
+                                    exclude: ["id"]
+                                },
                             },
                             {
                                 model: models.route,
@@ -32,15 +35,15 @@ class customerService {
                     }, {
                         model: models.sellers,
                         as: "seller",
-                        attributes: {
-                            exclude: ["id_route"]
-                        },
-                        include: [
-                            {
-                                model: models.route,
-                                as: "route"
-                            }
-                        ]
+                        // attributes: {
+                        //     exclude: ["id_route"]
+                        // },
+                        // include: [
+                        //     {
+                        //         model: models.route,
+                        //         as: "route"
+                        //     }
+                        // ]
                     }
                 ],
             });

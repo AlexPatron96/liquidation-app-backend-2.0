@@ -44,7 +44,7 @@ const getIdItem = async (req, res) => {
 const createItem = async (req, res) => {
     try {
         const route = req.body;
-        console.log(route);
+        // console.log(route);
         const result = await checkMoney.create(route);
         if (result) {
             res.status(201).json({ message: 'Route-day Create' });

@@ -12,7 +12,7 @@ const getAllItem = async (req, res) => {
 const createItem = async (req, res) => {
     try {
         const vehicle = req.body;
-        console.log(vehicle);
+        //console.log(vehicle);
         const result = await custumerService.create(vehicle);
         if (result) {
             res.status(201).json({ message: 'Customer created', result });
@@ -20,7 +20,7 @@ const createItem = async (req, res) => {
             res.status(400).json({ message: "Something wrong" });
         }
     } catch (error) {
-        console.log(error.message);
+        // console.log(error.message);
         res.status(400).json({ error: error.message });
     }
 };
@@ -35,7 +35,7 @@ const createClouster = async (req, res) => {
             res.status(400).json({ message: "Something wrong" });
         }
     } catch (error) {
-        console.log(error.message);
+        // console.log(error.message);
         res.status(400).json({ error: error.message });
     }
 };

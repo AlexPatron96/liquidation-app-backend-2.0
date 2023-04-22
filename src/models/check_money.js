@@ -16,10 +16,6 @@ class check_money extends Sequelize.Model {
       settlement_code: {
         type: DataTypes.STRING(50),
         allowNull: true,
-        references: {
-          model: 'cash_sell',
-          key: 'settlement_code'
-        }
       },
       id_bank: {
         type: DataTypes.INTEGER,

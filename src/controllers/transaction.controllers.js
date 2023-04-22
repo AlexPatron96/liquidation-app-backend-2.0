@@ -42,7 +42,7 @@ const createPay = async (req, res) => {
             if (total_bill !== 0) {
                 balance = balance - pay;
 
-                console.log("Balance ante"+balance);
+                //console.log("Balance ante"+balance);
                 if (!(balance < 0)) {
                     if (balance === 0) {
                         id_status = 3;
@@ -50,15 +50,15 @@ const createPay = async (req, res) => {
                         id_status = 2;
                     }
                     balance = balance.toFixed(2)
-                    console.log("balance");
-                    console.log(balance);
+                    //console.log("balance");
+                    //console.log(balance);
                     const updateBillPay = { balance, id_status };
                     const updateBill = await billService.update(id_bill, updateBillPay)
 
                     if (updateBill) {
-                        console.log("actualizo la factura de manera correcta");
+                        //console.log("actualizo la factura de manera correcta");
                         // data.pay = balance;
-                        console.log(data);
+                        //console.log(data);
                         const result = await transactionService.create(data);
                         if (result) {
                             res.status(201).json({ message: 'Pay created', result });
@@ -104,17 +104,17 @@ const deletePay = async (req, res) => {
         if (findIdPay) {
             const { num, abono } = findIdPay;
             const findIdBill = await billService.idBill(id_bills);
-            console.log(findIdBill);
+            //console.log(findIdBill);
             let { total_bill } = findIdBill;
             newTotal = total + abono;
             total = newTotal;
             type = "abonada"
             const dataUpdate = { num_Fact, isWhite, fecha_entrega, total, type, id_client, detalle_adt };
-            console.log(dataUpdate);
+            //console.log(dataUpdate);
             const updateBill = await billService.update(id_bills, dataUpdate);
-            console.log(updateBill);
+            //console.log(updateBill);
             if (updateBill) {
-                console.log("Actualizacion Realizada");
+                //console.log("Actualizacion Realizada");
                 const result = await transactionService.delete(id);
                 if (result) {
                     res.status(200).json({ message: "Required field removed with success", result });
@@ -139,14 +139,14 @@ const updatePay = async (req, res) => {
     try {
         const { id } = req.params;
         let data = req.body;
-        console.log(data);
+        //console.log(data);
         const findTrans = await transactionService.idPay(id);
         if (findTrans) {
             let { abono: abonoAnt, id_bills } = findTrans;
             const findBill = await billService.idBill(id_bills);
             let { total_fact, status, saldo } = findBill;
             if (data.abono === abonoAnt) {
-                console.log("es igual");
+                //console.log("es igual");
                 const result = await transactionService.update(id, data);
                 if (result) {
                     res.status(200).json({ message: "Item modified successfully", result });
@@ -154,9 +154,9 @@ const updatePay = async (req, res) => {
                     res.status(400).json({ message: 'It was not possible to modify this item' });
                 }
             } else {
-                console.log("No es igual");
+                //console.log("No es igual");
                 saldo = saldo + abonoAnt - data.abono;
-                console.log(saldo);
+                //console.log(saldo);
                 if (!(saldo < 0)) {
                     if (saldo === 0) {
                         status = "pagada";
@@ -164,7 +164,7 @@ const updatePay = async (req, res) => {
                         status = "abonada";
                     }
                     const dataBill = { status, saldo };
-                    console.log(dataBill);
+                    //console.log(dataBill);
                     const updateBill = await billService.update(id_bills, dataBill);
                     if (updateBill) {
                         const result = await transactionService.update(id, data);

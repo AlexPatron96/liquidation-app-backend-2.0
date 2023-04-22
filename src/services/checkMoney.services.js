@@ -53,6 +53,32 @@ class checkMoney {
         }
     };
 
+    static async createCheckCashVeh(data) {
+        try {
+            const result = await models.check_cash_veh.create(data);
+            return result;
+        } catch (error) {
+            throw error;
+        }
+    };
+    static async createCheckCashSell(data) {
+        try {
+            const result = await models.check_cash_sell.create(data);
+            return result;
+        } catch (error) {
+            throw error;
+        }
+    };
+
+    static async createCheckCashSell(data) {
+        try {
+            const result = await models.check_cash_sell.create(data);
+            return result;
+        } catch (error) {
+            throw error;
+        }
+    };
+
     static async delete(id) {
         try {
             const result = await models.check_money.destroy({ where: { id } });

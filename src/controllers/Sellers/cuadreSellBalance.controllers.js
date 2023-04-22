@@ -1,9 +1,10 @@
+const balanceSellService = require("../../services/balanceSell.services");
 const cuadreSellBalance = require("../../services/cuadreSellBalance.services");
 
 const getAllItem = async (req, res) => {
     try {
-        console.log(req.body);
-        console.log(req.params);
+        //console.log(req.body);
+        //console.log(req.params);
         const result = await cuadreSellBalance.findAll();
         res.status(200).json({ message: "Available Cuadre Seller ", result });
     } catch (error) {
@@ -27,11 +28,26 @@ const getIdItem = async (req, res) => {
 
 const createItem = async (req, res) => {
     try {
-        const vehicle = req.body;
-        console.log(vehicle);
-        const result = await cuadreSellBalance.create(vehicle);
+        const seller = req.body;
+        //console.log(vehicle);
+        const result = await cuadreSellBalance.create(seller);
         if (result) {
-            res.status(201).json({ message: 'Cuadre Seller created', result });
+            const { value, id_balance } = result;
+            console.log({ value, id_balance });
+            const findBalance = await balanceSellService.findId(id_balance);
+            if (findBalance) {
+                let { id, total } = findBalance;
+                console.log({ id, total });
+                total = total + value;
+                const refreshBalanceProcess = await balanceSellService.update(id, { total });
+                if (refreshBalanceProcess) {
+                    res.status(201).json({ message: 'Cuadre Seller created', result });
+                } else {
+                    res.status(400).json({ message: "Something wrong" });
+                }
+            } else {
+                res.status(400).json({ message: "Something wrong" });
+            }
         } else {
             res.status(400).json({ message: "Something wrong" });
         }
@@ -61,7 +77,7 @@ const updateItem = async (req, res) => {
     try {
         const { id } = req.params;
         const data = req.body;
-        console.log(data);
+        //console.log(data);
         const result = await cuadreSellBalance.update(id, data);
         if (result.ok) {
             res.status(200).json({ message: "Item modified successfully", result });
@@ -74,4 +90,4 @@ const updateItem = async (req, res) => {
 };
 
 
-module.exports = { getAllItem, getIdItem, createItem, deleteItem , updateItem };
+module.exports = { getAllItem, getIdItem, createItem, deleteItem, updateItem };

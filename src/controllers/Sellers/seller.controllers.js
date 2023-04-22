@@ -28,6 +28,22 @@ const getIdItem = async (req, res) => {
         res.status(400).json({ error: error.message });
     }
 }
+const balance = async (req, res) => {
+    try {
+        const seller = req.body;
+        const { id: id_seller } = seller;
+        const total = 0;
+        const dataBalance = { id_seller, total }
+        const result = await balanceSellService.create(dataBalance);
+        if (result) {
+            res.status(201).json({ message: 'Created Balance Seller', result });
+        } else {
+            res.status(400).json({ message: "Something wrong" });
+        }
+    } catch (error) {
+        res.status(400).json({ error: error.message });
+    }
+};
 
 const createItem = async (req, res) => {
     try {
@@ -50,7 +66,7 @@ const createItem = async (req, res) => {
 const createClouster = async (req, res) => {
     try {
         const dataClouster = req.body;
-        console.log(dataClouster);
+        //console.log(dataClouster);
         const result = await sellerService.createByClouster(dataClouster);
         if (result) {
             res.status(201).json({ message: 'Seller created by Clouster', result });
@@ -68,10 +84,10 @@ const updateItem = async (req, res) => {
     try {
         const { id } = req.params;
         const data = req.body;
-        console.log(id);
-        console.log(data);
+        //console.log(id);
+        //console.log(data);
         const toUpdate = await sellerService.update(id, data);
-        console.log(toUpdate);
+        //console.log(toUpdate);
         if (toUpdate) {
             // res.status(200).json({ message: "Required field removed with success.", result });
             res.status(200).json({ message: 'Seller successfully updated' });
@@ -97,4 +113,4 @@ const deleteItem = async (req, res) => {
         res.status(400).json({ error: error.message });
     }
 }
-module.exports = { getAllItem, getIdItem, createItem, deleteItem, updateItem , createClouster};
+module.exports = { getAllItem, getIdItem, createItem, deleteItem, updateItem , createClouster , balance};

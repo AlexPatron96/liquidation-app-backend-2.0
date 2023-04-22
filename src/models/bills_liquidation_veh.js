@@ -28,6 +28,10 @@ class bills_liquidation_veh extends Sequelize.Model {
         model: 'liquidation_veh',
         key: 'settlement_code'
       }
+    },
+    pass: {
+      type: DataTypes.DOUBLE,
+      allowNull: true,
     }
   }, {
     sequelize,

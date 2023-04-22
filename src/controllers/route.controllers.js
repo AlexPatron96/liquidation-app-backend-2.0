@@ -3,7 +3,7 @@ const RouteService = require("../services/route.services");
 const createItem = async (req, res) => {
     try {
         const route = req.body;
-        console.log(route);
+        // console.log(route);
         const result = await RouteService.create(route);
         if (result) {
             res.status(201).json({ message: 'Route Create' });
@@ -37,7 +37,7 @@ const getIdItem = async (req, res) => {
 const deleteItem = async (req, res) => {
     try {
         const { id } = req.params;
-        console.log(id);
+        // console.log(id);
         // const consult = await RouteService.idRoute(id);
         const result = await RouteService.delete(id);
         // res.status(200).json({ message: "required field removed with success", result });
