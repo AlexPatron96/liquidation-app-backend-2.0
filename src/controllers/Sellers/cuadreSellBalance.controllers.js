@@ -33,11 +33,11 @@ const createItem = async (req, res) => {
         const result = await cuadreSellBalance.create(seller);
         if (result) {
             const { value, id_balance } = result;
-            console.log({ value, id_balance });
+            // console.log({ value, id_balance });
             const findBalance = await balanceSellService.findId(id_balance);
             if (findBalance) {
                 let { id, total } = findBalance;
-                console.log({ id, total });
+                // console.log({ id, total });
                 total = total + value;
                 const refreshBalanceProcess = await balanceSellService.update(id, { total });
                 if (refreshBalanceProcess) {

@@ -29,6 +29,10 @@ class bills_liquidation_sellers extends Sequelize.Model {
         key: 'settlement_code'
       }
     },
+    saldo: {
+      type: DataTypes.DOUBLE,
+      allowNull: true,
+    },
     pass: {
       type: DataTypes.DOUBLE,
       allowNull: true,

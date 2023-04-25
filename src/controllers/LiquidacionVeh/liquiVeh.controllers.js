@@ -1,8 +1,12 @@
 const genCod = require("..");
+const balanceSellService = require("../../services/balanceSell.services");
+const balanceVehService = require("../../services/balanceVeh.services");
 const billService = require("../../services/bill.services");
 const cashSell = require("../../services/cashSell.services");
 const cashVeh = require("../../services/cashVeh.services");
 const checkMoney = require("../../services/checkMoney.services");
+const cuadreSellBalance = require("../../services/cuadreSellBalance.services");
+const cuadreVehBalance = require("../../services/cuadreVehBalance.services");
 const deliveredCred = require("../../services/deliveredCred.services");
 const discountSell = require("../../services/discountSell.services");
 const discountVeh = require("../../services/discountVeh.services");
@@ -40,19 +44,24 @@ const createItem = async (req, res) => {
         // const checkMoneyView = data[8];
         const sellerDeliverCred = data[9];
         const principal = data[14];
-        const checkMoneyview = data[15];
+        // const checkMoneyview = data[15];
+        const dataVehBalance = data[15];
 
         const { settlement_code: codLiquidation } = principal
         const { id_user: userID } = principal
+
 
         //console.log(principal);
         const result = await liquidationVeh.create(principal);
 
         if (result) {
+
+
             const { settlement_code } = result;
             const invoiceLiquidated = invoiceLiquidation.map((invoiceId) => {
-                const { id: id_bills } = invoiceId;
-                return { id_bills, id_liquidation: settlement_code, pass: invoiceId.pago }
+                const { id: id_bills, balance: saldo,  pago: pass } = invoiceId;
+                const id_liquidation = codLiquidation;
+                return { id_bills, id_liquidation, saldo, pass }
             });
 
             const processInvoice = await liquidationVeh.invoiceLiquidated(invoiceLiquidated);
@@ -97,7 +106,7 @@ const createItem = async (req, res) => {
                 const cashProcess = await cashVeh.create(cash);
                 const checkLiquidation = check.forEach(async (chekIt, index) => {
                     let data = chekIt;
-                    const settlement_code = codLiquidation;
+                    // const settlement_code = codLiquidation;
                     data.settlement_code = codLiquidation;
                     const checkProcess = await checkMoney.create(data);
                     const { id: id_check } = checkProcess;
@@ -148,7 +157,32 @@ const createItem = async (req, res) => {
                                 }
                             });
 
+                            // const id_balance = principal.id_vehicle;
+                            // const value = principal.balance;
+                            
+                            dataVehBalance.detail = `Realizado en la liquidacion ${codLiquidation}, por el usuario ${userID}`;
 
+
+                            console.log(dataVehBalance);
+                            const vehBalanceprocess = await cuadreVehBalance.create(dataVehBalance);
+                            if (vehBalanceprocess) {
+                                const { value, id_balance } = vehBalanceprocess;
+                                console.log({ value, id_balance });
+                                const findBalance = await balanceVehService.findId(id_balance);
+                                if (findBalance) {
+                                    let { id, total } = findBalance;
+                                    console.log({ id, total });
+                                    total = total + value;
+                                    const refreshBalanceProcess = await balanceVehService.update(id, { total });
+                                } else {
+                                    console.log("error en findbalance");
+                                    // res.status(400).json({ message: "Something wrong" });
+                                }
+                            } else {
+                                console.log("error en vehBalanceprocess");
+
+                                // res.status(400).json({ message: "Something wrong" });
+                            }
                             res.status(200).json({ message: "Liquidation resolve with success", result });
 
                         } else {

@@ -1,27 +1,46 @@
 const AuthServices = require("../services/auth.services");
 const transporter = require("../utils/mailer");
+const fs = require('fs');
+const path = require('path');
+
+const htmlMail = fs.readFileSync(path.join(__dirname, './../../src/templates/mailnew.html'), 'utf8');
 
 const register = async (req, res) => {
     try {
         const user = req.body;
+        const { password:clave } = user;
         const result = await AuthServices.register(user);
-        
+
         if (result) {
-            res.status(201).json({ message: "user Created", result });
-            await transporter.sendMail({
-                from: result.email,
-                to: "alex.patron@utelvt.edu.ec",
-                subject: "Email Confirmation",
-                text: "Hola Nodemailer",
-                html: "<h1>Bienvenido a la  </h1> <p> Tienes que confirmar tu cuenta </p> <a href='#' target='new_blanc'> enlace </a>",
+
+            const user = {
+                mail: result.mail,
+                fullname: result.fullname,
+                username: result.username,
+                password: clave
+            };
+
+            const htmlFormate = htmlMail.replace(/\${(.*?)}/g, (_, key) => {
+                return user[key.trim()];
             });
 
+            await transporter.sendMail({
+                from: "BossDesign",
+                to: result.mail,
+                subject: "Email de Registro",
+                text: "Bienvenido a la App",
+                html: htmlFormate,
+            });
+
+            res.status(201).json({ message: "user Created", result });
         }
 
     } catch (error) {
         res.status(400).json({ error: error.message });
     }
-}
+};
+
+
 
 const login = async (req, res) => {
     try {
@@ -41,14 +60,12 @@ const login = async (req, res) => {
             })
         }
         const result = await AuthServices.login({ mail, password });
-        // console.log(result.isValid);
         if (result.isValid) {
-            const { username, id, mail , password } = result.user;
-            const userData = { username, id, mail , password};
+            const { username, id, mail, password } = result.user;
+            const userData = { username, id, mail, password };
             const token = await AuthServices.genToken(userData);
             userData.password = "unknown";
             userData.token = token;
-            // console.log(userData);
             res.status(201).json({ message: "Permission enabled to logged in user", data: userData });
         } else {
             res.status(400).json(result.message);

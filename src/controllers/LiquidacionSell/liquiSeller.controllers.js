@@ -1,7 +1,9 @@
 const { cash_sell } = require("../../models");
+const balanceSellService = require("../../services/balanceSell.services");
 const billService = require("../../services/bill.services");
 const cashSell = require("../../services/cashSell.services");
 const checkMoney = require("../../services/checkMoney.services");
+const cuadreSellBalance = require("../../services/cuadreSellBalance.services");
 const discountSell = require("../../services/discountSell.services");
 const expenseSell = require("../../services/expenseSell.services");
 const liquiSeller = require("../../services/liquiSeller.services");
@@ -43,14 +45,22 @@ const createItem = async (req, res) => {
         const { settlement_code: codLiquidation } = principal
         const { id_user: userID } = principal
         //console.log(principal);
+        const datasellerBalance = data[12];
+
+
+
+
+
+
+
 
         const result = await liquiSeller.create(principal);
         if (result) {
             const { settlement_code } = result;
             //console.log("id de resul: " + settlement_code);
             const invoiceLiquidated = invoice.map((invoiceId) => {
-                const { id: id_bills, pago: pass } = invoiceId;
-                return { id_bills, id_liquidation: settlement_code, pass }
+                const { id: id_bills, pago: pass, balance: saldo } = invoiceId;
+                return { id_bills, id_liquidation: settlement_code, saldo, pass }
             });
 
             const processInvoice = await liquiSeller.invoiceLiquidated(invoiceLiquidated);
@@ -118,6 +128,34 @@ const createItem = async (req, res) => {
                                     return res.status(400).json({ message: 'Error! Not process checkProcessProcess ' });
                                 }
                             });
+                            
+
+                            datasellerBalance.detail = `Realizado en la liquidacion ${codLiquidation}, por el usuario ${userID}`;
+                            const sellBalanceprocess = await cuadreSellBalance.create(datasellerBalance);
+                            if (sellBalanceprocess) {
+                                const { value, id_balance } = sellBalanceprocess;
+                                console.log({ value, id_balance });
+                                const findBalance = await balanceSellService.findId(id_balance);
+                                if (findBalance) {
+                                    let { id, total } = findBalance;
+                                    console.log({ id, total });
+                                    total = total + value;
+                                    const refreshBalanceProcess = await balanceSellService.update(id, { total });
+                                    if (refreshBalanceProcess) {
+                                        console.log("SE REALIZO LA ACTUALIZACION DE EL BALANCE ");
+                                    } else {
+                                        console.log("ERROR EN AL REALIZAR LA ACTUALIZACION DE EL BALANCE ");
+                                    }
+                                }
+                                else {
+                                    // res.status(400).json({ message: "Something wrong" });
+                                    console.log("ERROR EN FIND BALANCE");
+                                }
+                            }
+                            else {
+                                // res.status(400).json({ message: "Something wrong" });
+                                console.log("ERROR EN  sellBalanceprocess");
+                            }
 
                             res.status(200).json({ message: "Liquidation resolve with success", result });
 
@@ -133,7 +171,8 @@ const createItem = async (req, res) => {
                     res.status(400).json({ message: 'Not process cash ', expensesProcess });
                 }
 
-            } else {
+            }
+            else {
                 res.status(400).json({ message: 'Not process Inovice', processInvoice });
             }
 

@@ -26,7 +26,7 @@ class cuadre_balance_seller extends Sequelize.Model {
       allowNull: true
     },
     detail: {
-      type: DataTypes.STRING(60),
+      type: DataTypes.STRING,
       allowNull: true
     }
   }, {

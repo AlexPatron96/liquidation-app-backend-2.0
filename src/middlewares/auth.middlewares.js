@@ -5,7 +5,7 @@ require("dotenv").config();
 
 const authMiddleware = (req, res, next) => {
     let { authorization: token } = req.headers;
-    
+
     // console.log(req.headers);
     // console.log("token sin descortar : ");
 
@@ -13,15 +13,15 @@ const authMiddleware = (req, res, next) => {
     // console.log( "nuevo token: ");
 
     jwt.verify(
-        token, 
+        token,
         process.env.JWT_SECRET,
-        {algorithm: "HS512" },
-        (err , decoded) => {
+        { algorithm: "HS512" },
+        (err, decoded) => {
             if (err) {
-                // console.log("invalid token");
-                res.status(400).json({error: "Invalid Token"});
+                console.log("TOKEN INVALID");
+                res.status(401).json({ error: "Invalid Token", message: " El token no es valido vuelva a ingresar a la aplicacion" });
             } else {
-                // console.log("decodificado con exito");
+                console.log("TOKEN VALIDO");
                 next();
             }
         });
