@@ -26,7 +26,7 @@ class cuadre_balance_veh extends Sequelize.Model {
       allowNull: true
     },
     detail: {
-      type: DataTypes.STRING(60),
+      type: DataTypes.STRING(256),
       allowNull: true
     }
   }, {

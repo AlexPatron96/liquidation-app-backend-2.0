@@ -52,7 +52,7 @@ class check_money extends Sequelize.Model {
         defaultValue: false
       },
       toName: {
-        type: DataTypes.STRING(60),
+        type: DataTypes.STRING(100),
         allowNull: true
       },
       total: {

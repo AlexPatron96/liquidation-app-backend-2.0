@@ -23,6 +23,10 @@ class products_returned extends Sequelize.Model {
       type: DataTypes.DOUBLE,
       allowNull: true
     },
+    expired: {
+      type: DataTypes.DOUBLE,
+      allowNull: true
+    },
     total: {
       type: DataTypes.DOUBLE,
       allowNull: true

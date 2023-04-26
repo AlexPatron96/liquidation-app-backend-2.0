@@ -14,7 +14,7 @@ class clients extends Sequelize.Model {
       primaryKey: true
     },
     fullname: {
-      type: DataTypes.STRING(60),
+      type: DataTypes.STRING(100),
       allowNull: false
     },
     code_external: {

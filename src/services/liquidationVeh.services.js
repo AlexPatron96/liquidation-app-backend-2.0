@@ -67,6 +67,22 @@ class liquidationVeh {
                     }, {
                         model: models.bills_liquidation_veh,
                         as: "bills_liquidation_vehs",
+                        include: [
+                            {
+                                model: models.bills,
+                                as: "id_bills_bill",
+                                include: [
+                                    {
+                                        model: models.clients,
+                                        as: "client"
+                                    },
+                                    {
+                                        model: models.transaction,
+                                        as: "transactions"
+                                    },
+                                ]
+                            }
+                        ]
                     }, {
                         model: models.delivered_credits,
                         as: "delivered_credits",
