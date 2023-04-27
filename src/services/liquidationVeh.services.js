@@ -45,6 +45,25 @@ class liquidationVeh {
                                     {
                                         model: models.check_money,
                                         as: "check_veh",
+                                        attributes: {
+                                            exclude: ["id_bank","id_client","toName","createdAt","updatedAt","settlement_code","isEndorsed"]
+                                        },
+                                        include: [
+                                            {
+                                                model: models.clients,
+                                                as: "id_client_client",
+                                                attributes: {
+                                                    exclude: ["id", "address", "code_externa", "dni", "id_route_day", "id_seller"]
+                                                },
+
+                                            }, {
+                                                model: models.bank,
+                                                as: "id_bank_bank",
+                                                attributes: {
+                                                    exclude: ["id"]
+                                                },
+                                            }
+                                        ]
                                     }
                                 ]
                             },
@@ -56,10 +75,23 @@ class liquidationVeh {
                             {
                                 model: models.bill_product_return,
                                 as: "bill_product_return",
+                                attributes: {
+                                    exclude: ["id"]
+                                },
                                 include: [
                                     {
                                         model: models.bills,
                                         as: "id_bills_bill",
+                                        include: [
+                                            {
+                                                model: models.clients,
+                                                as: "client",
+                                            },{
+                                                model: models.sellers,
+                                                as: "seller",
+                                            }
+
+                                        ]
                                     }
                                 ]
                             }
@@ -71,16 +103,23 @@ class liquidationVeh {
                             {
                                 model: models.bills,
                                 as: "id_bills_bill",
+                                attributes:{
+                                    exclude: ["id_client", "id_seller"]
+                                },
                                 include: [
                                     {
                                         model: models.clients,
-                                        as: "client"
+                                        as: "client",
+                                        attributes:{
+                                            exclude: ["id", "address", "code_external", "dni", "id_route_day", "id_seller"]
+                                        },
                                     },
                                     {
                                         model: models.transaction,
                                         as: "transactions"
                                     },
                                 ]
+
                             }
                         ]
                     }, {
@@ -92,6 +131,10 @@ class liquidationVeh {
                         include: {
                             model: models.sellers,
                             as: "seller",
+                            attributes: {
+                                exclude: ["id","id_route","isActive"]
+                            },
+                            
                         }
                     }
                     // , {

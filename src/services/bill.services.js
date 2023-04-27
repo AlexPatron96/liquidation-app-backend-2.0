@@ -10,7 +10,7 @@ class billService {
                 order: [
                     ['id', 'DESC'],
                 ],
-                limit: 1500,
+                limit: 5000,
                 attributes: {
                     exclude: ["id_client", "id_seller"]
                 },
@@ -26,7 +26,7 @@ class billService {
                                 model: models.route_day,
                                 as: "route_day",
                                 attributes: {
-                                    exclude: ["id_route","day_id","id"]
+                                    exclude: ["id_route","id"]
                                 },
                                 include: [
                                     {
@@ -36,7 +36,10 @@ class billService {
                                     {
                                         model: models.route,
                                         as: "id_route_route",
-                                    }
+                                        attributes: {
+                                            exclude: ["detail","id","name"]
+                                        },
+                                    },
                                 ]
                             },
                         ],
@@ -84,6 +87,7 @@ class billService {
                 order: [
                     ['id', 'DESC'],
                 ],
+                limit: 1500,
                 attributes: {
                     exclude: ["id_client", "id_seller"]
                 },
@@ -97,13 +101,35 @@ class billService {
                         include: [
                             {
                                 model: models.route_day,
-                                as: "route_day"
+                                as: "route_day",
+                                attributes: {
+                                    exclude: ["id_route","day_id","id"]
+                                },
+                                include: [
+                                    {
+                                        model: models.day,
+                                        as: "day",
+                                    },
+                                    {
+                                        model: models.route,
+                                        as: "id_route_route",
+                                    }
+                                ]
                             },
                         ],
                     },
                     {
+                        order: [
+                            ['id', 'DESC'], ['balance_date', 'DESC']
+                        ],
                         model: models.transaction,
                         as: "transactions",
+                        include: [
+                            {
+                                model: models.users,
+                                as: "id_user_user",
+                            }
+                        ]
                     },
                     {
                         model: models.sellers,
