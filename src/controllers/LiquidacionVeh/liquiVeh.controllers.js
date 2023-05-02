@@ -59,7 +59,7 @@ const createItem = async (req, res) => {
 
             const { settlement_code } = result;
             const invoiceLiquidated = invoiceLiquidation.map((invoiceId) => {
-                const { id: id_bills, balance: saldo,  pago: pass } = invoiceId;
+                const { id: id_bills, balance: saldo, pago: pass } = invoiceId;
                 const id_liquidation = codLiquidation;
                 return { id_bills, id_liquidation, saldo, pass }
             });
@@ -103,7 +103,9 @@ const createItem = async (req, res) => {
                     }
                 });
 
+                cash.settlement_code = codLiquidation;
                 const cashProcess = await cashVeh.create(cash);
+
                 const checkLiquidation = check.forEach(async (chekIt, index) => {
                     let data = chekIt;
                     // const settlement_code = codLiquidation;
@@ -123,12 +125,13 @@ const createItem = async (req, res) => {
                     }
                 });
 
+                expenses.settlement_code = codLiquidation;
                 const expensesProcess = await expenseVeh.create(expenses);
                 if (expensesProcess) {
-
+                    discount.settlement_code = codLiquidation;
                     const discountProcess = await discountVeh.create(discount);
                     if (discountProcess) {
-
+                        productReturn.settlement_code = codLiquidation;
                         const productReturnPorcess = await productRet.create(productReturn);
                         if (productReturnPorcess) {
 
@@ -159,7 +162,7 @@ const createItem = async (req, res) => {
 
                             // const id_balance = principal.id_vehicle;
                             // const value = principal.balance;
-                            
+
                             dataVehBalance.detail = `Realizado en la liquidacion ${codLiquidation}, por el usuario ${userID}`;
 
 
@@ -183,6 +186,12 @@ const createItem = async (req, res) => {
 
                                 // res.status(400).json({ message: "Something wrong" });
                             }
+                            const invoiceLiquidated = invoiceLiquidation.forEach(async (invoiceId) => {
+                                const { id: id_inv } = invoiceId;
+
+                                const invoiceAggVeh = await billService.update(id_inv, { vehicle_liq: 0 });
+                            });
+
                             res.status(200).json({ message: "Liquidation resolve with success", result });
 
                         } else {

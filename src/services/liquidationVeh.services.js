@@ -6,9 +6,13 @@ class liquidationVeh {
     static async findAll() {
         try {
             const result = await models.liquidation_veh.findAll({
+                order: [
+                    ['createdAt', 'DESC']
+                ],
                 attributes: {
                     exclude: ["id_user", "id_vehicle"]
                 },
+                limit: 150,
                 include: [
                     {
                         model: models.users,

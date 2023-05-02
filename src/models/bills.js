@@ -61,6 +61,10 @@ class bills extends Sequelize.Model {
         model: 'sellers',
         key: 'id'
       }
+    },
+    vehicle_liq: {
+      type: DataTypes.INTEGER,
+      allowNull: true,
     }
   }, {
     sequelize,

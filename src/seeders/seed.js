@@ -13,6 +13,7 @@ const days = [
     { day: 'viernes' },
     { day: 'sabado' },
     { day: 'domingo' },
+    { day: 'todos' },
 ];
 
 const status = [
@@ -22,6 +23,7 @@ const status = [
 ];
 
 const routes = [
+    { name: 'RUTA G', external_code: 'M0', detail: 'General Todas las rutas' },
     { name: 'RUTA 1', external_code: 'M1', detail: 'ok' },
     { name: 'RUTA 2', external_code: 'M2', detail: 'ok' },
     { name: 'RUTA 3', external_code: 'M3', detail: 'ok' },
@@ -34,11 +36,7 @@ const routes = [
 ];
 
 const routesDay = [
-    { id_route: '1', day_id: '1' },
-    { id_route: '1', day_id: '2' },
-    { id_route: '1', day_id: '3' },
-    { id_route: '1', day_id: '4' },
-    { id_route: '1', day_id: '5' },
+    { id_route: '1', day_id: '8' },
 
     { id_route: '2', day_id: '1' },
     { id_route: '2', day_id: '2' },
@@ -87,6 +85,12 @@ const routesDay = [
     { id_route: '9', day_id: '3' },
     { id_route: '9', day_id: '4' },
     { id_route: '9', day_id: '5' },
+
+    { id_route: '10', day_id: '1' },
+    { id_route: '10', day_id: '2' },
+    { id_route: '10', day_id: '3' },
+    { id_route: '10', day_id: '4' },
+    { id_route: '10', day_id: '5' },
 ];
 
 db.sync({ force: true })

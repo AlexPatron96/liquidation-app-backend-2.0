@@ -30,11 +30,11 @@ class delivered_credits extends Sequelize.Model {
       }
     },
     sales: {
-      type: DataTypes.INTEGER,
+      type: DataTypes.DOUBLE,
       allowNull: true
     },
     total: {
-      type: DataTypes.INTEGER,
+      type: DataTypes.DOUBLE,
       allowNull: true
     },
     detail: {

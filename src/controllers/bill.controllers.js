@@ -27,56 +27,64 @@ const getRouteBill = async (req, res) => {
     }
 };
 
+const getFindNumBill = async (req, res) => {
+    try {
+        const { num_bill } = req.body;
+        // console.log(id);
+        const findRoute = await billService.findNumBill(num_bill);
+        res.status(200).json({ message: `Invoices available por la ruta del   `, findRoute });
+    } catch (error) {
+        res.status(400).json({ error: error.message });
+    }
+};
+
 const createItem = async (req, res) => {
     try {
         let data = req.body;
         // console.log(data);
         let { num_bill } = data;
-        const factWhite = data.isWhite === "true" ? true : false;
-        // console.log(data.isWhite === "true" ? true : false);
-
-        let isValid = false;
-        if (factWhite) {
-            // console.log(factWhite);
-            num = genCod("FA-BL-");
-            data.num_bill = num;
-            isValid = true;
-            // console.log("es verdadedo es white : " + factWhite);
-
+        const existence = await billService.findNumBill(num_bill);
+        if (existence) {
+            console.log(existence);
+            const { id_client,num_bill, balance, total_bill } = existence;
+            res.status(400).json({ message: `Ya existe un registro con ese numero de Documento. Clienteid: ${id_client} #${num_bill} , Balance:${balance} , Total:${total_bill} `, });
         } else {
-            // console.log("es falso no  es white : " + factWhite);
-            // console.log();
-            const validator = /\d{3}\-\d{9}/;
-            // console.log(validator.test(num_bill))
-            if (validator.test(num_bill)) {
-                // console.log("SI CUMPLE LA VALIDACION");
+            const factWhite = data.isWhite === "true" ? true : false;
+
+            let isValid = false;
+            if (factWhite) {
+                // console.log(factWhite);
+                num = genCod("FA-BL-");
+                data.num_bill = num;
                 isValid = true;
+                // console.log("es verdadedo es white : " + factWhite);
+
             } else {
-                res.status(400).json({ message: "El numero de factura no cumple con la validacion" });
+                // console.log("es falso no  es white : " + factWhite);
+                // console.log();
+                const validator = /\d{3}\-\d{9}/;
+                // console.log(validator.test(num_bill))
+                if (validator.test(num_bill)) {
+                    // console.log("SI CUMPLE LA VALIDACION");
+                    isValid = true;
+                } else {
+                    res.status(400).json({ message: "El numero de factura no cumple con la validacion" });
+                }
+            }
+
+            // console.log(isValid);
+            if (isValid) {
+                const result = await billService.create(data);
+                // console.log(isValid);
+                if (result) {
+                    res.status(201).json({ message: 'Invoice created', result });
+
+                } else {
+                    res.status(400).json({ message: "Something wrong" });
+                }
             }
         }
 
-        // console.log(isValid);
-        if (isValid) {
-            const result = await billService.create(data);
-            // console.log(isValid);
-            if (result) {
-                res.status(201).json({ message: 'Invoice created', result });
-                // const { num_bill, deliver_date : balance_date } = result;
-                // const id_user = null;
-                // const pay = 0;
-                // const transaction = { num_bill, balance_date, pay, id_user };
-                // console.log(transaction);
-                // const initTransaction = await transactionService.create(transaction)
-                // if (initTransaction) {
-                //     res.status(201).json({ message: 'Invoice created', result, transaction });
-                // } else {
-                //     res.status(400).json({ message: "Something wrong" });
-                // }
-            } else {
-                res.status(400).json({ message: "Something wrong" });
-            }
-        }
     } catch (error) {
         res.status(400).json({ error: error.message });
     }

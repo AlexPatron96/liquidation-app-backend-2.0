@@ -21,6 +21,10 @@ class vehicles extends Sequelize.Model {
       type: DataTypes.STRING(30),
       allowNull: true
     },
+    cod_mv: {
+      type: DataTypes.STRING(30),
+      allowNull: true
+    },
     dni: {
       type: DataTypes.STRING(13),
       allowNull: true,

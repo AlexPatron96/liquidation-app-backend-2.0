@@ -65,6 +65,7 @@ const createItem = async (req, res) => {
 
             const processInvoice = await liquiSeller.invoiceLiquidated(invoiceLiquidated);
             if (processInvoice) {
+
                 const transactionProces = transaction.forEach(async (trans, index) => {
                     const { id_bill, pay } = trans;
                     const findBill = await billService.findId(id_bill);
@@ -99,15 +100,15 @@ const createItem = async (req, res) => {
                     }
                 });
 
-
+                expenses.settlement_code = codLiquidation;
                 const expensesProcess = await expenseSell.create(expenses);
                 if (expensesProcess) {
-
+                    discount.settlement_code = codLiquidation;
                     const discountProcess = await discountSell.create(discount);
                     if (discountProcess) {
 
                         //console.log({ message: "correcto discountProcess" });
-
+                        cash.settlement_code = codLiquidation;
                         const cashProcess = await cashSell.create(cash);
                         if (cashProcess) {
                             const checkLiquidation = check.forEach(async (chekIt, index) => {
@@ -128,7 +129,6 @@ const createItem = async (req, res) => {
                                     return res.status(400).json({ message: 'Error! Not process checkProcessProcess ' });
                                 }
                             });
-                            
 
                             datasellerBalance.detail = `Realizado en la liquidacion ${codLiquidation}, por el usuario ${userID}`;
                             const sellBalanceprocess = await cuadreSellBalance.create(datasellerBalance);
@@ -143,6 +143,11 @@ const createItem = async (req, res) => {
                                     const refreshBalanceProcess = await balanceSellService.update(id, { total });
                                     if (refreshBalanceProcess) {
                                         console.log("SE REALIZO LA ACTUALIZACION DE EL BALANCE ");
+
+                                        const invoiceLiquidated = invoice.forEach(async (invoiceId) => {
+                                            const { id: id_inv, vehicle_liq } = invoiceId;
+                                            const invoiceAggVeh = await billService.update(id_inv, { vehicle_liq });
+                                        });
                                     } else {
                                         console.log("ERROR EN AL REALIZAR LA ACTUALIZACION DE EL BALANCE ");
                                     }

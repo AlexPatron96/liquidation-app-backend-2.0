@@ -12,7 +12,7 @@ class billService {
                 ],
                 limit: 5000,
                 attributes: {
-                    exclude: ["id_client", "id_seller"]
+                    exclude: ["id_client", "isd_seller"]
                 },
                 include: [
                     {
@@ -26,7 +26,7 @@ class billService {
                                 model: models.route_day,
                                 as: "route_day",
                                 attributes: {
-                                    exclude: ["id_route","id"]
+                                    exclude: ["id_route", "id"]
                                 },
                                 include: [
                                     {
@@ -37,7 +37,7 @@ class billService {
                                         model: models.route,
                                         as: "id_route_route",
                                         attributes: {
-                                            exclude: ["detail","id","name"]
+                                            exclude: ["detail", "id", "name"]
                                         },
                                     },
                                 ]
@@ -103,7 +103,7 @@ class billService {
                                 model: models.route_day,
                                 as: "route_day",
                                 attributes: {
-                                    exclude: ["id_route","day_id","id"]
+                                    exclude: ["id_route", "day_id", "id"]
                                 },
                                 include: [
                                     {
@@ -155,6 +155,18 @@ class billService {
                     }
                 }
 
+            });
+            return result;
+        } catch (error) {
+            throw error;
+        }
+    };
+    static async findNumBill(numBill) {
+        try {
+            const result = await models.bills.findOne({
+                where: {
+                    num_bill: numBill,
+                }
             });
             return result;
         } catch (error) {
