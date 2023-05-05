@@ -16,6 +16,26 @@ const getAllItem = async (req, res) => {
     }
 };
 
+const getSearch = async (req, res) => {
+    try {
+        const id_client = req.query.client;
+        const numFact = req.query.numBill;
+        const dateInit = req.query.dateInit;
+        const dateEnd = req.query.dateEnd;
+        const id_seller = req.query.seller;
+        const balance = req.query.balance;
+        const data = { id_client, numFact, dateInit, dateEnd , id_seller , balance};
+        const result = await billService.searchQuery(data);
+        if (result) {
+            res.status(200).json({ message: "Invoices available", result });
+        } else {
+            res.status(400).json({ message: "Something wrong" });
+        }
+    } catch (error) {
+        res.status(400).json({ error: error.message });
+    }
+};
+
 const getRouteBill = async (req, res) => {
     try {
         const { id } = req.params;
@@ -46,7 +66,7 @@ const createItem = async (req, res) => {
         const existence = await billService.findNumBill(num_bill);
         if (existence) {
             console.log(existence);
-            const { id_client,num_bill, balance, total_bill } = existence;
+            const { id_client, num_bill, balance, total_bill } = existence;
             res.status(400).json({ message: `Ya existe un registro con ese numero de Documento. Clienteid: ${id_client} #${num_bill} , Balance:${balance} , Total:${total_bill} `, });
         } else {
             const factWhite = data.isWhite === "true" ? true : false;
@@ -150,5 +170,5 @@ const updateItem = async (req, res) => {
 };
 
 
-module.exports = { getAllItem, getIdItem, createItem, deleteItem, updateItem, getRouteBill };
+module.exports = { getAllItem, getIdItem, createItem, deleteItem, updateItem, getRouteBill, getSearch };
 
