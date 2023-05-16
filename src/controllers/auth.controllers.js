@@ -8,7 +8,7 @@ const htmlMail = fs.readFileSync(path.join(__dirname, './../../src/templates/mai
 const register = async (req, res) => {
     try {
         const user = req.body;
-        const { password:clave } = user;
+        const { password: clave } = user;
         const result = await AuthServices.register(user);
 
         if (result) {
@@ -61,8 +61,8 @@ const login = async (req, res) => {
         }
         const result = await AuthServices.login({ mail, password });
         if (result.isValid) {
-            const { username, id, mail, password } = result.user;
-            const userData = { username, id, mail, password };
+            const { fullname, username, id, mail, password } = result.user;
+            const userData = { fullname, username, id, mail, password };
             const token = await AuthServices.genToken(userData);
             userData.password = "unknown";
             userData.token = token;

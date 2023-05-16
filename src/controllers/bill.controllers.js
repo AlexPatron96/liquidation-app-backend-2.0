@@ -24,7 +24,7 @@ const getSearch = async (req, res) => {
         const dateEnd = req.query.dateEnd;
         const id_seller = req.query.seller;
         const balance = req.query.balance;
-        const data = { id_client, numFact, dateInit, dateEnd , id_seller , balance};
+        const data = { id_client, numFact, dateInit, dateEnd, id_seller, balance };
         const result = await billService.searchQuery(data);
         if (result) {
             res.status(200).json({ message: "Invoices available", result });
@@ -124,6 +124,32 @@ const getIdItem = async (req, res) => {
     }
 };
 
+const getIdItemForEch = async (req, res) => {
+    try {
+        const data = req.body;
+        let isExistError = false;
+        let invoicePosition = '';
+        for (let i = 0; i < data.length; i++) {
+            const result = await billService.findId(data[i].id);
+            if (!result) {
+                isExistError = true;
+                invoicePosition = `Busca en la posicion ${i + 1} de la lista de facturas a liquidar, con numero de factura # ${data[i].num_bill}`
+                break;
+            }
+        }
+        
+        if (isExistError) {
+            res.status(200).json({ isExistError, info: `${invoicePosition}.` });
+        } else {
+            res.status(200).json({ isExistError, info: "TODO OK" });
+        }
+
+    } catch (error) {
+        res.status(400).json({ error: error.message });
+    }
+};
+
+
 const deleteItem = async (req, res) => {
     try {
         const { id } = req.params;
@@ -170,5 +196,5 @@ const updateItem = async (req, res) => {
 };
 
 
-module.exports = { getAllItem, getIdItem, createItem, deleteItem, updateItem, getRouteBill, getSearch };
+module.exports = { getAllItem, getIdItem, createItem, deleteItem, updateItem, getRouteBill, getSearch, getIdItemForEch };
 

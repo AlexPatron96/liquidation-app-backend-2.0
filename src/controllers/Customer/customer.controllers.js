@@ -12,7 +12,7 @@ const getAllItem = async (req, res) => {
 const createItem = async (req, res) => {
     try {
         const vehicle = req.body;
-        //console.log(vehicle);
+        console.log(vehicle);
         const result = await custumerService.create(vehicle);
         if (result) {
             res.status(201).json({ message: 'Customer created', result });

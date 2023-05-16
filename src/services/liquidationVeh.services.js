@@ -136,7 +136,7 @@ class liquidationVeh {
                             model: models.sellers,
                             as: "seller",
                             attributes: {
-                                exclude: ["id","id_route","isActive"]
+                                exclude: ["id_route","isActive"]
                             },
                             
                         }
