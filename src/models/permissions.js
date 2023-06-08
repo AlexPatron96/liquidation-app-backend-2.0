@@ -1,9 +1,9 @@
 const Sequelize = require("sequelize");
 module.exports = (sequelize, DataTypes) => {
-	return sellers.init(sequelize, DataTypes);
+	return permissions.init(sequelize, DataTypes);
 };
 
-class sellers extends Sequelize.Model {
+class permissions extends Sequelize.Model {
 	static init(sequelize, DataTypes) {
 		return super.init(
 			{
@@ -14,56 +14,49 @@ class sellers extends Sequelize.Model {
 					allowNull: false,
 					primaryKey: true,
 				},
-				code: {
+				name_permissions: {
 					type: DataTypes.STRING(15),
 					allowNull: false,
 				},
-				name: {
-					type: DataTypes.STRING,
-					allowNull: false,
-				},
-				isActive: {
+				create_newroll: {
 					type: DataTypes.BOOLEAN,
 					allowNull: true,
 					defaultValue: false,
 				},
-				id_route: {
-					type: DataTypes.INTEGER,
-					allowNull: true,
-					references: {
-						model: "route",
-						key: "id",
-					},
-				},
-				max_fact: {
-					type: DataTypes.DOUBLE,
-					allowNull: true,
-				},
-				liquidation_isactive: {
+				create_newpermissions: {
 					type: DataTypes.BOOLEAN,
 					allowNull: true,
 					defaultValue: false,
 				},
-				data_liquidation: {
-					type: DataTypes.ARRAY(DataTypes.JSONB),
+				create_user: {
+					type: DataTypes.BOOLEAN,
 					allowNull: true,
+					defaultValue: false,
+				},
+				create_seller: {
+					type: DataTypes.BOOLEAN,
+					allowNull: true,
+					defaultValue: false,
+				},
+				create_vehicle: {
+					type: DataTypes.BOOLEAN,
+					allowNull: true,
+					defaultValue: false,
+				},
+				edited_seller_maxtotal: {
+					type: DataTypes.BOOLEAN,
+					allowNull: true,
+					defaultValue: false,
 				},
 			},
 			{
 				sequelize,
-				tableName: "sellers",
+				tableName: "permissions",
 				schema: "public",
 				timestamps: false,
 				indexes: [
-					// {
-					//   name: "sellers_id_route_key",
-					//   unique: true,
-					//   fields: [
-					//     { name: "id_route" },
-					//   ]
-					// },
 					{
-						name: "sellers_pkey",
+						name: "permissions_pkey",
 						unique: true,
 						fields: [{ name: "id" }],
 					},
