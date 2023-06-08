@@ -1,9 +1,9 @@
 const Sequelize = require("sequelize");
 module.exports = (sequelize, DataTypes) => {
-	return sellers.init(sequelize, DataTypes);
+	return roll.init(sequelize, DataTypes);
 };
 
-class sellers extends Sequelize.Model {
+class roll extends Sequelize.Model {
 	static init(sequelize, DataTypes) {
 		return super.init(
 			{
@@ -14,12 +14,8 @@ class sellers extends Sequelize.Model {
 					allowNull: false,
 					primaryKey: true,
 				},
-				code: {
+				rol_user: {
 					type: DataTypes.STRING(15),
-					allowNull: false,
-				},
-				name: {
-					type: DataTypes.STRING,
 					allowNull: false,
 				},
 				isActive: {
@@ -27,43 +23,23 @@ class sellers extends Sequelize.Model {
 					allowNull: true,
 					defaultValue: false,
 				},
-				id_route: {
+				id_permissions: {
 					type: DataTypes.INTEGER,
 					allowNull: true,
 					references: {
-						model: "route",
+						model: "permissions",
 						key: "id",
 					},
-				},
-				max_fact: {
-					type: DataTypes.DOUBLE,
-					allowNull: true,
-				},
-				liquidation_isactive: {
-					type: DataTypes.BOOLEAN,
-					allowNull: true,
-					defaultValue: false,
-				},
-				data_liquidation: {
-					type: DataTypes.ARRAY(DataTypes.JSONB),
-					allowNull: true,
 				},
 			},
 			{
 				sequelize,
-				tableName: "sellers",
+				tableName: "roll",
 				schema: "public",
 				timestamps: false,
 				indexes: [
-					// {
-					//   name: "sellers_id_route_key",
-					//   unique: true,
-					//   fields: [
-					//     { name: "id_route" },
-					//   ]
-					// },
 					{
-						name: "sellers_pkey",
+						name: "roll_pkey",
 						unique: true,
 						fields: [{ name: "id" }],
 					},
