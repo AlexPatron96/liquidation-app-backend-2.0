@@ -105,22 +105,27 @@ db.sync({ force: true })
 	.then(() => {
 		console.log("Iniciando Sembrado de Informacion");
 		days.forEach((day) => models.day.create(day));
+		console.log("A sembrado Days...");
 
 		setTimeout(() => {
 			status.forEach((statu) => models.status.create(statu));
+			console.log("A sembrado Status...");
 		}, [1000]);
 
 		setTimeout(() => {
 			routes.forEach((rout) => models.route.create(rout));
+			console.log("A sembrado Rutas...");
 		}, [2000]);
 
 		setTimeout(() => {
 			routesDay.forEach((rotDay) => models.route_day.create(rotDay));
+			console.log("A sembrado RouteDay...");
 		}, [3000]);
 
 		setTimeout(() => {
 			user.forEach((user) => models.users.create(user));
+			console.log("A sembrado user...");
+			console.log("A Teminado el sembrado de la base de datos...");
 		}, [4000]);
-		console.log("A Teminado el sembrado de la base de datos...");
 	})
 	.catch((error) => console.log(error));

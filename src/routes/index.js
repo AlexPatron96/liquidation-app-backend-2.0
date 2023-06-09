@@ -160,7 +160,7 @@ const routerApi = (app) => {
 	// - /api/v1/cuadre-sell/:id/update  ---> edita un item por id
 
 	//Rutas de Facturas
-	app.use("/api/v1/invoice", billRoutes);
+	app.use("/api/v1/invoice", authMiddleware, billRoutes);
 	// - /api/v1/invoice/new  ---> Permite crear una nuevo Clientes
 	// - /api/v1/invoice/:id  ---> Retorna un Clientes por su id
 	// - /api/v1/invoice/all  ---> Retorna todos los Clientes
