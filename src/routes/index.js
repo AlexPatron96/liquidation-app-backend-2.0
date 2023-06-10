@@ -41,10 +41,10 @@ const routerApi = (app) => {
 	// - /api/v1/auth/user/:id/del   ---> Eliminar un usuario
 
 	app.use("/api/v1/roll", authMiddleware, rollUser);
-	// - /api/v1/roll/new  ---> Permite crear una nueva ruta
-	// - /api/v1/roll/all  ---> Retorna todas las Rutas de entrega
-	// - /api/v1/roll/:id/del  ---> Elimina ruta por id
-	// - /api/v1/roll/:id/update  ---> EditaRuta ruta por id
+	// - /api/v1/roll/new  ---> Permite crear una nuevo roles
+	// - /api/v1/roll/all  ---> Retorna todos los roles
+	// - /api/v1/roll/:id/del  ---> Elimina roles por id
+	// - /api/v1/roll/:id/update  ---> EditaRuta roles por id
 
 	app.use("/api/v1/permissions", authMiddleware, permissionsRoll);
 	// - /api/v1/permissions/new  ---> Permite crear una nueva ruta

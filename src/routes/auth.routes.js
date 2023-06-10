@@ -6,6 +6,7 @@ const {
 	login,
 	deleteUser,
 	listUser,
+	updateUser,
 } = require("../controllers/auth.controllers");
 
 const router = Router();
@@ -15,6 +16,7 @@ const router = Router();
 router.get("/register/users", listUser);
 router.post("/register", register);
 router.post("/login", login);
+router.put("/user/:id/update", updateUser);
 router.delete("/user/:id/del", deleteUser);
 
 module.exports = router;
