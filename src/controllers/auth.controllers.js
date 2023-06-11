@@ -2,6 +2,7 @@ const AuthServices = require("../services/auth.services");
 const transporter = require("../utils/mailer");
 const fs = require("fs");
 const path = require("path");
+const bcrypt = require("bcrypt");
 
 const htmlMail = fs.readFileSync(
 	path.join(__dirname, "./../../src/templates/mailnew.html"),
@@ -60,8 +61,17 @@ const login = async (req, res) => {
 		}
 		const result = await AuthServices.login({ mail, password });
 		if (result.isValid) {
-			const { fullname, username, id, mail, password, roll } = result.user;
-			const userData = { fullname, username, id, mail, password, roll };
+			const { fullname, username, id, dni, mail, password, roll } =
+				result.user;
+			const userData = {
+				fullname,
+				username,
+				id,
+				mail,
+				password,
+				roll,
+				dni,
+			};
 			const token = await AuthServices.genToken(userData);
 			userData.password = "unknown";
 			userData.token = token;
@@ -95,8 +105,13 @@ const deleteUser = async (req, res) => {
 const updateUser = async (req, res) => {
 	try {
 		const { id } = req.params;
-		const data = req.body;
-		// console.log(id);
+		let data = req.body;
+		const { password } = data;
+		if (password) {
+			const hash = bcrypt.hashSync(password, 10);
+			data.password = hash;
+		}
+		console.log(data);
 		const result = await AuthServices.updateUser(id, data);
 		if (result) {
 			res.status(201).json({
