@@ -168,7 +168,8 @@ const routerApi = (app) => {
 	// - /api/v1/invoice/:id/update  ---> edita un Clientes por id
 
 	//Rutas de transaccion
-	app.use("/api/v1/payments", authMiddleware, transactionRoutes);
+	// app.use("/api/v1/payments", authMiddleware, transactionRoutes);
+	app.use("/api/v1/payments", transactionRoutes);
 	// - /api/v1/payments/new  ---> Permite crear una nuevo Pago
 	// - /api/v1/payments/:id  ---> Retorna un pago por su id
 	// - /api/v1/payments/all  ---> Retorna todos los pago

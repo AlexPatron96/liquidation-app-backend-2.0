@@ -14,6 +14,25 @@ const user = [
 		dni: "0850320078",
 		mail: "alex.patron1996@hotmail.com",
 		password: "alex1234",
+		id_roll: 1,
+	},
+];
+const permissions = [
+	{
+		name_permissions: "Permisos Generales",
+		create_newroll: true,
+		create_newpermissions: true,
+		create_user: true,
+		create_seller: true,
+		create_vehicle: true,
+		edited_seller_maxtotal: true,
+	},
+];
+const roll = [
+	{
+		rol_user: "Administrador",
+		isActive: true,
+		id_permissions: 1,
 	},
 ];
 
@@ -123,9 +142,20 @@ db.sync({ force: true })
 		}, [3000]);
 
 		setTimeout(() => {
+			permissions.forEach((permit) => models.permissions.create(permit));
+			console.log("A sembrado los permisos...");
+		}, [4000]);
+
+		setTimeout(() => {
+			roll.forEach((rolling) => models.roll.create(rolling));
+			console.log("A sembrado los rolles de usuarios...");
+		}, [5000]);
+
+		setTimeout(() => {
 			user.forEach((user) => models.users.create(user));
 			console.log("A sembrado user...");
 			console.log("A Teminado el sembrado de la base de datos...");
-		}, [4000]);
+			console.log("Culminando...");
+		}, [6000]);
 	})
 	.catch((error) => console.log(error));

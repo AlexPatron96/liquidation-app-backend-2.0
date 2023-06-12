@@ -15,7 +15,7 @@ class permissions extends Sequelize.Model {
 					primaryKey: true,
 				},
 				name_permissions: {
-					type: DataTypes.STRING(15),
+					type: DataTypes.STRING(30),
 					allowNull: false,
 				},
 				create_newroll: {
