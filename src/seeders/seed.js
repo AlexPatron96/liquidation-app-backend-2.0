@@ -14,6 +14,25 @@ const user = [
 		dni: "0850320078",
 		mail: "alex.patron1996@hotmail.com",
 		password: "alex1234",
+		id_roll: 1,
+	},
+];
+const permissions = [
+	{
+		name_permissions: "Permisos Generales",
+		create_newroll: true,
+		create_newpermissions: true,
+		create_user: true,
+		create_seller: true,
+		create_vehicle: true,
+		edited_seller_maxtotal: true,
+	},
+];
+const roll = [
+	{
+		rol_user: "Administrador",
+		isActive: true,
+		id_permissions: 1,
 	},
 ];
 
@@ -105,22 +124,38 @@ db.sync({ force: true })
 	.then(() => {
 		console.log("Iniciando Sembrado de Informacion");
 		days.forEach((day) => models.day.create(day));
+		console.log("A sembrado Days...");
 
 		setTimeout(() => {
 			status.forEach((statu) => models.status.create(statu));
+			console.log("A sembrado Status...");
 		}, [1000]);
 
 		setTimeout(() => {
 			routes.forEach((rout) => models.route.create(rout));
+			console.log("A sembrado Rutas...");
 		}, [2000]);
 
 		setTimeout(() => {
 			routesDay.forEach((rotDay) => models.route_day.create(rotDay));
+			console.log("A sembrado RouteDay...");
 		}, [3000]);
 
 		setTimeout(() => {
-			user.forEach((user) => models.users.create(user));
+			permissions.forEach((permit) => models.permissions.create(permit));
+			console.log("A sembrado los permisos...");
 		}, [4000]);
-		console.log("A Teminado el sembrado de la base de datos...");
+
+		setTimeout(() => {
+			roll.forEach((rolling) => models.roll.create(rolling));
+			console.log("A sembrado los rolles de usuarios...");
+		}, [5000]);
+
+		setTimeout(() => {
+			user.forEach((user) => models.users.create(user));
+			console.log("A sembrado user...");
+			console.log("A Teminado el sembrado de la base de datos...");
+			console.log("Culminando...");
+		}, [6000]);
 	})
 	.catch((error) => console.log(error));

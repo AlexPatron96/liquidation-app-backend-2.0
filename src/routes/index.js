@@ -41,10 +41,10 @@ const routerApi = (app) => {
 	// - /api/v1/auth/user/:id/del   ---> Eliminar un usuario
 
 	app.use("/api/v1/roll", authMiddleware, rollUser);
-	// - /api/v1/roll/new  ---> Permite crear una nueva ruta
-	// - /api/v1/roll/all  ---> Retorna todas las Rutas de entrega
-	// - /api/v1/roll/:id/del  ---> Elimina ruta por id
-	// - /api/v1/roll/:id/update  ---> EditaRuta ruta por id
+	// - /api/v1/roll/new  ---> Permite crear una nuevo roles
+	// - /api/v1/roll/all  ---> Retorna todos los roles
+	// - /api/v1/roll/:id/del  ---> Elimina roles por id
+	// - /api/v1/roll/:id/update  ---> EditaRuta roles por id
 
 	app.use("/api/v1/permissions", authMiddleware, permissionsRoll);
 	// - /api/v1/permissions/new  ---> Permite crear una nueva ruta
@@ -160,7 +160,7 @@ const routerApi = (app) => {
 	// - /api/v1/cuadre-sell/:id/update  ---> edita un item por id
 
 	//Rutas de Facturas
-	app.use("/api/v1/invoice", billRoutes);
+	app.use("/api/v1/invoice", authMiddleware, billRoutes);
 	// - /api/v1/invoice/new  ---> Permite crear una nuevo Clientes
 	// - /api/v1/invoice/:id  ---> Retorna un Clientes por su id
 	// - /api/v1/invoice/all  ---> Retorna todos los Clientes
@@ -168,7 +168,8 @@ const routerApi = (app) => {
 	// - /api/v1/invoice/:id/update  ---> edita un Clientes por id
 
 	//Rutas de transaccion
-	app.use("/api/v1/payments", authMiddleware, transactionRoutes);
+	// app.use("/api/v1/payments", authMiddleware, transactionRoutes);
+	app.use("/api/v1/payments", transactionRoutes);
 	// - /api/v1/payments/new  ---> Permite crear una nuevo Pago
 	// - /api/v1/payments/:id  ---> Retorna un pago por su id
 	// - /api/v1/payments/all  ---> Retorna todos los pago

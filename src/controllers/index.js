@@ -1,15 +1,14 @@
+const genCod = (data) => {
+	var mapa = "abcdefghijklmnopqrstuvwxyz0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ",
+		codigo = data,
+		i = 0;
 
+	for (i; i < 8; i++) {
+		codigo += mapa.charAt(Math.floor(Math.random() * mapa.length));
+	}
+	return codigo;
+};
 
-const  genCod = (data) => {
-    var mapa = 'abcdefghijklmnopqrstuvwxyz0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ',
-      codigo = data,
-      i = 0;
-
-    for(i; i < 8; i++) {
-        codigo += mapa.charAt(Math.floor(Math.random() * mapa.length));
-    }
-    return codigo;
-}
 // const genCod = (data) => {
 //   const prefix  = data;
 //   let seq = 100000

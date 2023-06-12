@@ -38,7 +38,18 @@ class users extends Sequelize.Model {
 					type: DataTypes.STRING,
 					allowNull: false,
 					validate: {
-						is: /^(?=\w*\d)(?=\w*[A-Z])(?=\w*[a-z])\S{8,16}$/i,
+						validatePassword(value) {
+							if (
+								this._changingPassword &&
+								!/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])\S{8,16}$/.test(
+									value
+								)
+							) {
+								throw new Error(
+									"La contraseña no cumple con los requisitos Minimos"
+								);
+							}
+						},
 					},
 					/*La contraseña debe tener al entre 8 y 16 
         caracteres, al menos un dígito, al menos una 
@@ -58,10 +69,20 @@ class users extends Sequelize.Model {
 			{
 				hooks: {
 					beforeCreate: (user, options) => {
-						const { password } = user;
-						const hash = bcrypt.hashSync(password, 10);
-						user.password = hash;
+						if (user.changed("password")) {
+							user._changingPassword = true;
+							user.password = bcrypt.hashSync(
+								user.password,
+								10
+							);
+							delete user._changingPassword;
+						}
 					},
+					// beforeCreate: (user, options) => {
+					// 	const { password } = user;
+					// 	const hash = bcrypt.hashSync(password, 10);
+					// 	user.password = hash;
+					// },
 				},
 				sequelize,
 				tableName: "users",
