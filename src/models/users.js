@@ -46,7 +46,7 @@ class users extends Sequelize.Model {
 								)
 							) {
 								throw new Error(
-									"La contraseña no cumple con los requisitos"
+									"La contraseña no cumple con los requisitos Minimos"
 								);
 							}
 						},
