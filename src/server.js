@@ -1,13 +1,13 @@
-
 const app = require("./app");
 
 const PORT = process.env.PORT || 8000;
 
 app.listen(PORT, () => {
-    console.log("Servidor escuchando en el puerto: " + PORT);
-})
+	console.log("Servidor escuchando en el puerto: " + PORT);
+});
 
-{/*
+{
+	/*
 const https = require('https');
 const fs = require('fs');
 
@@ -25,6 +25,8 @@ const PORT = process.env.PORT || 8000;
 //})
 https.createServer(options, app).listen(PORT, () => {
 console.log("Servidor escuchando en el puerto: "+ PORT);
+console.log("Welcome to the DCheo Distributor company server - Desarrollador Por BossDesign");
 })
 
-*/}
+*/
+}

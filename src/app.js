@@ -30,6 +30,9 @@ db.authenticate()
 
 app.get("/", (req, res) => {
 	res.json({ message: "Welcome to the DCheo Distributor company server" });
+	console.log(
+		"Welcome to the DCheo Distributor company server - Desarrollador Por BossDesign"
+	);
 });
 
 routerApi(app);
