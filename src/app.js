@@ -19,9 +19,9 @@ db.authenticate()
 //db.sync({ alter: this.trace })
 
 // db.sync({ force: true })
-db.sync({ alter: false })
-	.then(() => console.log("Base de datos Sincronizada"))
-	.catch((error) => console.log(error));
+// db.sync({ alter: false })
+// 	.then(() => console.log("Base de datos Sincronizada"))
+// 	.catch((error) => console.log(error));
 
 // La sincronizacion permiter, definir sino existe una tabla la crea en
 // En caso contrario que exista no la toca.
@@ -29,7 +29,7 @@ db.sync({ alter: false })
 // force: true => borra todo lo que tiene la base y vuelve a crearla sobre escribe.
 
 app.get("/", (req, res) => {
-	res.json({ message: "Welcome to my server" });
+	res.json({ message: "Welcome to the DCheo Distributor company server" });
 });
 
 routerApi(app);
