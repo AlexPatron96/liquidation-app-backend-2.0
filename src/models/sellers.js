@@ -45,8 +45,10 @@ class sellers extends Sequelize.Model {
 					defaultValue: false,
 				},
 				data_liquidation: {
-					type: DataTypes.ARRAY(DataTypes.JSONB),
+					type: DataTypes.TEXT,
 					allowNull: true,
+					// type: DataTypes.ARRAY(DataTypes.JSONB),
+					// allowNull: true,
 				},
 			},
 			{
@@ -55,13 +57,6 @@ class sellers extends Sequelize.Model {
 				schema: "public",
 				timestamps: false,
 				indexes: [
-					// {
-					//   name: "sellers_id_route_key",
-					//   unique: true,
-					//   fields: [
-					//     { name: "id_route" },
-					//   ]
-					// },
 					{
 						name: "sellers_pkey",
 						unique: true,
