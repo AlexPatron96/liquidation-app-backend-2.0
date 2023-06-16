@@ -50,8 +50,10 @@ class vehicles extends Sequelize.Model {
 					defaultValue: false,
 				},
 				data_liquidation: {
-					type: DataTypes.ARRAY(DataTypes.JSONB),
+					type: DataTypes.TEXT,
 					allowNull: true,
+					// type: DataTypes.ARRAY(DataTypes.JSONB),
+					// allowNull: true,
 				},
 			},
 			{

@@ -67,6 +67,13 @@ class billService {
 					{
 						model: models.sellers,
 						as: "seller",
+						attributes: {
+							exclude: [
+								"data_liquidation",
+								"max_fact",
+								"liquidation_isactive",
+							],
+						},
 					},
 				],
 			});
@@ -193,6 +200,13 @@ class billService {
 					{
 						model: models.sellers,
 						as: "seller",
+						attributes: {
+							exclude: [
+								"data_liquidation",
+								"max_fact",
+								"liquidation_isactive",
+							],
+						},
 					},
 				],
 			});
@@ -264,6 +278,13 @@ class billService {
 					{
 						model: models.sellers,
 						as: "seller",
+						attributes: {
+							exclude: [
+								"data_liquidation",
+								"max_fact",
+								"liquidation_isactive",
+							],
+						},
 					},
 				],
 			});
